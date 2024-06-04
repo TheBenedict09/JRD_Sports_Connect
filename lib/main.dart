@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/pages/get_started_page.dart';
+import 'package:jrd_s_c/pages/login_page.dart';
 import 'package:jrd_s_c/pages/registration_page.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme:
               const TextTheme(bodyLarge: TextStyle(fontFamily: 'MyFont'))),
-      home: const RegistrationPage(),
+      home: const LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

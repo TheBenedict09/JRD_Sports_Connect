@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _LoginPageState extends State<LoginPage> {
   double x = 0.9;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c1,
+      backgroundColor: c2,
       body: Stack(
         children: [
           Stack(
@@ -26,7 +26,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   width: MediaQuery.of(context).size.width * x * 1.1,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c4,
+                    color: c1,
                   ),
                 ),
               ),
@@ -38,7 +38,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   width: MediaQuery.of(context).size.width * x,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c5,
+                    color: c4,
                   ),
                 ),
               ),
@@ -53,9 +53,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               Center(
                 child: Text(
-                  "Register",
+                  "Login",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.black,
+                        color: c3,
                         fontSize: MediaQuery.of(context).size.width * 0.12,
                       ),
                   textAlign: TextAlign.center,
@@ -125,7 +125,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     backgroundColor: c5,
                     onPressed: () {},
                     child: Text(
-                      "Register",
+                      "Login",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.white,
                             fontSize: MediaQuery.of(context).size.width * 0.06,
@@ -142,13 +142,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Already a User?"),
-                    TextButton(onPressed: () {}, child: Text("Login"))
+                    Text("New User?"),
+                    TextButton(onPressed: () {}, child: Text("Register"))
                   ],
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
