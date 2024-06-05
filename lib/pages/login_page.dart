@@ -142,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("New User?"),
-                    TextButton(onPressed: () {}, child: Text("Register"))
+                    const Text("New User?"),
+                    TextButton(onPressed: () {}, child: const Text("Register"))
                   ],
                 ),
               ),
