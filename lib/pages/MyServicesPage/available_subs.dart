@@ -1,32 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:jrd_s_c/pages/MyServicesPage/active_subs.dart';
-import 'package:jrd_s_c/pages/MyServicesPage/available_subs.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
-class MyServicesPage extends StatefulWidget {
-  const MyServicesPage({super.key});
+class AvailableSubscriptionPage extends StatefulWidget {
+  const AvailableSubscriptionPage({super.key});
 
   @override
-  State<MyServicesPage> createState() => _MyServicesPageState();
+  State<AvailableSubscriptionPage> createState() =>
+      _AvailableSubscriptionPageState();
 }
 
-class _MyServicesPageState extends State<MyServicesPage> {
+class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   double x = 0.9;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return AvailableSubscriptionPage();
-            },
-          ));
-        },
-        backgroundColor: c3,
-        child: const Icon(Iconsax.add, size: 50),
-      ),
       body: Stack(
         children: [
           Stack(
@@ -39,7 +27,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   width: MediaQuery.of(context).size.width * x * 1.3,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c7,
+                    color: c1,
                   ),
                 ),
               ),
@@ -51,7 +39,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   width: MediaQuery.of(context).size.width * x * 1.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c10,
+                    color: c5,
                   ),
                 ),
               ),
@@ -59,7 +47,6 @@ class _MyServicesPageState extends State<MyServicesPage> {
           ),
           SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
@@ -67,7 +54,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Active Subscriptions:",
+                    "Available Subscriptions:",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w900,
                           fontSize: 50,
@@ -80,7 +67,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   child: ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return const ActiveSubElement();
+                      return const NewSubElement();
                     },
                     separatorBuilder: (context, index) {
                       return const Padding(
@@ -95,6 +82,30 @@ class _MyServicesPageState extends State<MyServicesPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NewSubElement extends StatelessWidget {
+  const NewSubElement({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: c10,
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: ListTile(
+          title: const Text("Title",
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: const Text("Time:"),
+        ),
       ),
     );
   }
