@@ -37,18 +37,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Stack(
             children: [
-              Positioned(
-                top: -MediaQuery.of(context).size.height * x / 2.2,
-                left: -MediaQuery.of(context).size.width * x / 2.2,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * x * 1.1,
-                  width: MediaQuery.of(context).size.width * x * 1.1,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: c2,
-                  ),
-                ),
-              ),
+              BigGreyCircle(x: x),
             ],
           ),
           SingleChildScrollView(
@@ -105,3 +94,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
