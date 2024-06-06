@@ -13,17 +13,45 @@ class MyServicesPage extends StatefulWidget {
 
 class _MyServicesPageState extends State<MyServicesPage> {
   double x = 0.9;
+
+  void _handleFloatingButtonPressed(BuildContext context) {
+    final DateTime now = DateTime.now();
+    if (now.day > 10) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Iconsax.close_circle),
+              ),
+            ],
+            title: Text(
+              "Cannot start new Subscription After 10th of a Month!",
+              textAlign: TextAlign.center,
+              style:
+                  Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 20),
+            ),
+          );
+        },
+      );
+    } else {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return AvailableSubscriptionPage();
+        },
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return AvailableSubscriptionPage();
-            },
-          ));
-        },
+        onPressed: () => _handleFloatingButtonPressed(context),
         backgroundColor: c3,
         child: const Icon(Iconsax.add, size: 50),
       ),

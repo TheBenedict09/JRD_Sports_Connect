@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/pages/MyServicesPage/active_subs.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
 class AvailableSubscriptionPage extends StatefulWidget {
@@ -12,6 +11,7 @@ class AvailableSubscriptionPage extends StatefulWidget {
 
 class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   double x = 0.9;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +39,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                   width: MediaQuery.of(context).size.width * x * 1.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c5,
+                    color: c2,
                   ),
                 ),
               ),
@@ -77,7 +77,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                     },
                     itemCount: 5,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -87,10 +87,58 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   }
 }
 
-class NewSubElement extends StatelessWidget {
-  const NewSubElement({
-    super.key,
-  });
+class NewSubElement extends StatefulWidget {
+  const NewSubElement({super.key});
+
+  @override
+  _NewSubElementState createState() => _NewSubElementState();
+}
+
+class _NewSubElementState extends State<NewSubElement> {
+  TimeOfDay? selectedStartTime;
+  TimeOfDay? selectedEndTime;
+
+  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isStartTime
+          ? TimeOfDay(hour: 5, minute: 0)
+          : TimeOfDay(hour: 21, minute: 0),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null && picked.hour >= 5 && picked.hour <= 21) {
+      setState(() {
+        if (isStartTime) {
+          selectedStartTime = picked;
+        } else {
+          selectedEndTime = picked;
+        }
+      });
+    } else {
+      // Show a dialog if the selected time is out of the allowed range
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Invalid Time"),
+          content: Text("Please select a time between 5:00 AM and 9:00 PM."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +150,135 @@ class NewSubElement extends StatelessWidget {
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      title: Text(
+                        "Title",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Select Time Range:",
+                            textAlign: TextAlign.left,
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontSize: 20,
+                                    ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02,
+                          ),
+                          Text(
+                            "Start Time:",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontSize: 18,
+                                    ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await _selectTime(context, true);
+                              setState(() {});
+                            },
+                            child: Text(
+                              selectedStartTime == null
+                                  ? "Select start time"
+                                  : "Start time: ${selectedStartTime!.format(context)}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: c1),
+                            ),
+                          ),
+                          Text(
+                            "End Time:",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontSize: 18,
+                                    ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await _selectTime(context, false);
+                              setState(() {});
+                            },
+                            child: Text(
+                              selectedEndTime == null
+                                  ? "Select end time"
+                                  : "End time: ${selectedEndTime!.format(context)}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: c1),
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            if (selectedStartTime != null &&
+                                selectedEndTime != null) {
+                              print(
+                                  "Selected Start Time: ${selectedStartTime!.format(context)}");
+                              print(
+                                  "Selected End Time: ${selectedEndTime!.format(context)}");
+
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      "New Subscription Added",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontSize: 25,
+                                          ),
+                                    ),
+                                  );
+                                },
+                              );
+
+                              Future.delayed(Duration(seconds: 2), () {
+                                Navigator.of(context)
+                                    .pop(); // Close the confirmation dialog
+                                Navigator.of(context)
+                                    .pop(); // Close the original dialog
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            );
+          },
           title: const Text("Title",
               style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: const Text("Time:"),

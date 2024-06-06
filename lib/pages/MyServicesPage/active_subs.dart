@@ -16,6 +16,9 @@ class ActiveSubElement extends StatelessWidget {
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
+          onTap: () {
+            
+          },
           title: const Text("Title",
               style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: const Text("End Date:"),
