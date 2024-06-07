@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:jrd_s_c/admin_pages/event_page.dart';
 import 'package:jrd_s_c/admin_pages/report.dart';
-import 'package:jrd_s_c/admin_pages/services_page.dart';
+import 'package:jrd_s_c/admin_pages/ServicesPage/services_page.dart';
 import 'package:jrd_s_c/colors.dart';
 
 class AdminBottomNavBarPage extends StatefulWidget {
