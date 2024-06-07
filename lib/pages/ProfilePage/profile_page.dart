@@ -10,6 +10,14 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   double x = 0.9;
+  String email = "xyz@gmail.com";
+  String phoneNumber = "1234567890";
+  String address = "California";
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Padding(
                       padding: const EdgeInsets.all(13.0),
                       child: Text(
-                        "xyz@gmail.com",
+                        email,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: 20,
@@ -135,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Padding(
                       padding: const EdgeInsets.all(13.0),
                       child: Text(
-                        "1234567890",
+                        phoneNumber,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: 20,
@@ -170,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Padding(
                       padding: const EdgeInsets.all(13.0),
                       child: Text(
-                        "California",
+                        address,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: 20,
@@ -188,7 +196,68 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: MediaQuery.of(context).size.width * 0.5,
                     height: MediaQuery.of(context).size.height * 0.065,
                     child: FloatingActionButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        emailController.text = email;
+                        phoneNumberController.text = phoneNumber;
+                        addressController.text = address;
+
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Edit Profile',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: c8),
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextField(
+                                    controller: emailController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Email'),
+                                  ),
+                                  TextField(
+                                    controller: phoneNumberController,
+                                    decoration: InputDecoration(
+                                        labelText: 'Phone Number'),
+                                  ),
+                                  TextField(
+                                    controller: addressController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Address'),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      email = emailController.text;
+                                      phoneNumber = phoneNumberController.text;
+                                      address = addressController.text;
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Save'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       backgroundColor: c9,
                       child: Text(
                         "Edit",
