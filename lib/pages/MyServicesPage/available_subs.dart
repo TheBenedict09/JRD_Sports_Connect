@@ -91,6 +91,7 @@ class NewSubElement extends StatefulWidget {
   const NewSubElement({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NewSubElementState createState() => _NewSubElementState();
 }
 
@@ -102,8 +103,8 @@ class _NewSubElementState extends State<NewSubElement> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: isStartTime
-          ? TimeOfDay(hour: 5, minute: 0)
-          : TimeOfDay(hour: 21, minute: 0),
+          ? const TimeOfDay(hour: 5, minute: 0)
+          : const TimeOfDay(hour: 21, minute: 0),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -122,17 +123,18 @@ class _NewSubElementState extends State<NewSubElement> {
       });
     } else {
       // Show a dialog if the selected time is out of the allowed range
+      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Invalid Time"),
-          content: Text("Please select a time between 5:00 AM and 9:00 PM."),
+          title: const Text("Invalid Time"),
+          content: const Text("Please select a time between 5:00 AM and 9:00 PM."),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         ),
@@ -230,13 +232,13 @@ class _NewSubElementState extends State<NewSubElement> {
                       ),
                       actions: <Widget>[
                         TextButton(
-                          child: Text("Cancel"),
+                          child: const Text("Cancel"),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         TextButton(
-                          child: Text("OK"),
+                          child: const Text("OK"),
                           onPressed: () {
                             if (selectedStartTime != null &&
                                 selectedEndTime != null) {
@@ -263,7 +265,7 @@ class _NewSubElementState extends State<NewSubElement> {
                                 },
                               );
 
-                              Future.delayed(Duration(seconds: 2), () {
+                              Future.delayed(const Duration(seconds: 2), () {
                                 Navigator.of(context)
                                     .pop(); // Close the confirmation dialog
                                 Navigator.of(context)

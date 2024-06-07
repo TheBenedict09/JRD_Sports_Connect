@@ -3,7 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:jrd_s_c/pages/HomePage/home_page.dart';
 import 'package:jrd_s_c/pages/MyServicesPage/my_services_page.dart';
-import 'package:jrd_s_c/pages/profile_page.dart';
+import 'package:jrd_s_c/pages/ProfilePage/profile_page.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
 class BottomNavBarPage extends StatefulWidget {
