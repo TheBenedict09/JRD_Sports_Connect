@@ -1,12 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/admin_pages/utilities/admin_bottom_navbar.dart';
-import 'package:jrd_s_c/user_pages/BasicCredentialsPage/get_started_page.dart';
-import 'package:jrd_s_c/user_pages/BasicCredentialsPage/login_page.dart';
-import 'package:jrd_s_c/user_pages/BasicCredentialsPage/registration_page.dart';
-import 'package:jrd_s_c/user_pages/utilities/bottom_navbar.dart';
 import 'package:jrd_s_c/colors.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

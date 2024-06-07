@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jrd_s_c/admin_pages/ServicesPage/services_page_elements.dart';
 import 'package:jrd_s_c/colors.dart';
 
@@ -9,6 +10,7 @@ class AdminServicesPage extends StatefulWidget {
   State<AdminServicesPage> createState() => Admin_ServicesPageState();
 }
 
+// ignore: camel_case_types
 class Admin_ServicesPageState extends State<AdminServicesPage> {
   final TextEditingController _titleController = TextEditingController();
   final List<String> _daysOfWeek = [
@@ -25,21 +27,49 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
 
+  Future<void> _addService() async {
+    String title = _titleController.text;
+    String startDay = _startDay ?? '';
+    String endDay = _endDay ?? '';
+    String startTime = _startTime?.format(context) ?? '';
+    String endTime = _endTime?.format(context) ?? '';
+
+    if (title.isEmpty ||
+        startDay.isEmpty ||
+        endDay.isEmpty ||
+        startTime.isEmpty ||
+        endTime.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill in all fields')));
+      return;
+    }
+
+    CollectionReference services =
+        FirebaseFirestore.instance.collection('Services');
+    await services.add({
+      'title': title,
+      'startDay': startDay,
+      'endDay': endDay,
+      'startTime': startTime,
+      'endTime': endTime,
+    });
+  }
+
   void _showAddServiceDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Service'),
+          title: const Text('Add New Service'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextField(
                 controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               DropdownButton<String>(
-                hint: Text('Select Starting Day'),
+                hint: const Text('Select Starting Day'),
                 value: _startDay,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -54,7 +84,7 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
                 }).toList(),
               ),
               DropdownButton<String>(
-                hint: Text('Select Ending Day'),
+                hint: const Text('Select Ending Day'),
                 value: _endDay,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -104,15 +134,16 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child: Text('Add'),
-              onPressed: () {
-                // You can add your logic to save the new service here.
+              child: const Text('Add'),
+              onPressed: () async {
+                await _addService();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
             ),
@@ -122,10 +153,30 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
     );
   }
 
+  TimeOfDay _timeFromString(String timeString) {
+    final format = RegExp(r'(\d+):(\d+)\s(\w{2})');
+    final match = format.firstMatch(timeString);
+    if (match != null) {
+      final hour = int.parse(match.group(1)!);
+      final minute = int.parse(match.group(2)!);
+      final period = match.group(3)!;
+
+      final adjustedHour = period == 'PM' && hour != 12
+          ? hour + 12
+          : period == 'AM' && hour == 12
+              ? 0
+              : hour;
+
+      return TimeOfDay(hour: adjustedHour, minute: minute);
+    } else {
+      throw const FormatException('Invalid time format');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         width: MediaQuery.of(context).size.width * 0.5,
         height: MediaQuery.of(context).size.height * 0.07,
         child: FloatingActionButton(
@@ -138,40 +189,68 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('Services').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text('Something went wrong'));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final services = snapshot.data?.docs ?? [];
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Services:",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w900, fontSize: 50, color: c5),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height *
+                      0.14 *
+                      services.length,
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      var service = services[index];
+                      TimeOfDay startTime =
+                          _timeFromString(service['startTime']);
+                      TimeOfDay endTime = _timeFromString(service['endTime']);
+                      return AdminServicesElements(
+                        title: service['title'],
+                        startDay: service['startDay'],
+                        endDay: service['endDay'],
+                        startTime: startTime,
+                        endTime: endTime,
+                        id: service.id,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Padding(
+                        padding: EdgeInsets.only(left: 38, right: 38),
+                        child: Divider(),
+                      );
+                    },
+                    itemCount: services.length,
+                  ),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Services:",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w900, fontSize: 50, color: c5),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.14 * 5,
-              child: ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return const AdminServicesElements();
-                },
-                separatorBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.only(left: 38, right: 38),
-                    child: Divider(),
-                  );
-                },
-                itemCount: 5,
-              ),
-            )
-          ],
-        ),
+          );
+        },
       ),
     );
   }
