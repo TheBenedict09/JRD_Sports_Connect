@@ -10,6 +10,118 @@ class AdminServicesPage extends StatefulWidget {
 }
 
 class Admin_ServicesPageState extends State<AdminServicesPage> {
+  final TextEditingController _titleController = TextEditingController();
+  final List<String> _daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
+  String? _startDay;
+  String? _endDay;
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
+
+  void _showAddServiceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add New Service'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+              DropdownButton<String>(
+                hint: Text('Select Starting Day'),
+                value: _startDay,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _startDay = newValue;
+                  });
+                },
+                items: _daysOfWeek.map<DropdownMenuItem<String>>((String day) {
+                  return DropdownMenuItem<String>(
+                    value: day,
+                    child: Text(day),
+                  );
+                }).toList(),
+              ),
+              DropdownButton<String>(
+                hint: Text('Select Ending Day'),
+                value: _endDay,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _endDay = newValue;
+                  });
+                },
+                items: _daysOfWeek.map<DropdownMenuItem<String>>((String day) {
+                  return DropdownMenuItem<String>(
+                    value: day,
+                    child: Text(day),
+                  );
+                }).toList(),
+              ),
+              TextButton(
+                onPressed: () async {
+                  TimeOfDay? picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (picked != null && picked != _startTime) {
+                    setState(() {
+                      _startTime = picked;
+                    });
+                  }
+                },
+                child: Text(_startTime == null
+                    ? 'Select Start Time'
+                    : 'Start Time: ${_startTime!.format(context)}'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  TimeOfDay? picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (picked != null && picked != _endTime) {
+                    setState(() {
+                      _endTime = picked;
+                    });
+                  }
+                },
+                child: Text(_endTime == null
+                    ? 'Select End Time'
+                    : 'End Time: ${_endTime!.format(context)}'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text('Add'),
+              onPressed: () {
+                // You can add your logic to save the new service here.
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +129,7 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
         width: MediaQuery.of(context).size.width * 0.5,
         height: MediaQuery.of(context).size.height * 0.07,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: _showAddServiceDialog,
           backgroundColor: c10,
           child: Text(
             "Add new Service",

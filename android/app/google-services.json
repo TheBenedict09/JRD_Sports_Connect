@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "567411559292",
+    "project_id": "jrd-sports-connect",
+    "storage_bucket": "jrd-sports-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567411559292:android:0bcca7ec4df147ae4832f9",
+        "android_client_info": {
+          "package_name": "com.example.jrd_s_c"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUjIXI0KkYrOfsgY4UDgZH6L_gzDpdtqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
