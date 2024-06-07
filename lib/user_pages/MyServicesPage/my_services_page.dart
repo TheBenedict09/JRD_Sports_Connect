@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:jrd_s_c/pages/MyServicesPage/active_subs.dart';
-import 'package:jrd_s_c/pages/MyServicesPage/available_subs.dart';
+import 'package:jrd_s_c/user_pages/MyServicesPage/active_subs.dart';
+import 'package:jrd_s_c/user_pages/MyServicesPage/available_subs.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
 class MyServicesPage extends StatefulWidget {

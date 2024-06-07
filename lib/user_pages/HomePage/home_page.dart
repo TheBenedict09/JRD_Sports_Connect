@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/pages/HomePage/home_page_updates.dart';
+import 'package:jrd_s_c/user_pages/HomePage/home_page_updates.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w900,
                             fontSize: 50,
-                            color: c3),
+                            color: c5),
                       ),
                     ],
                   ),
@@ -94,4 +94,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

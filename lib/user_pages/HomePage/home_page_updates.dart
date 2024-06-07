@@ -47,7 +47,7 @@ class BigGreyCircle extends StatelessWidget {
         width: MediaQuery.of(context).size.width * x * 1.1,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: c6,
+          color: c10,
         ),
       ),
     );

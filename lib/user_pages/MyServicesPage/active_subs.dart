@@ -9,15 +9,15 @@ class ActiveSubElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String subscriptionName = "Subscription Name";
-    final String timeRange = "01 Jan - 10 Jan";
+    const String subscriptionName = "Subscription Name";
+    const String timeRange = "01 Jan - 10 Jan";
     final DateTime now = DateTime.now();
 
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: c4,
+          color: c3,
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
@@ -52,7 +52,7 @@ class ActiveSubElement extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    icon: Icon(Iconsax.close_circle),
+                                    icon: const Icon(Iconsax.close_circle),
                                   ),
                                 ],
                                 title: Text(

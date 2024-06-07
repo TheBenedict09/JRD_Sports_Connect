@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/pages/BasicCredentialsPage/get_started_page.dart';
-import 'package:jrd_s_c/pages/BasicCredentialsPage/login_page.dart';
-import 'package:jrd_s_c/pages/BasicCredentialsPage/registration_page.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/get_started_page.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/login_page.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/registration_page.dart';
 import 'package:jrd_s_c/utilities/bottom_navbar.dart';
 import 'package:jrd_s_c/utilities/colors.dart';
 

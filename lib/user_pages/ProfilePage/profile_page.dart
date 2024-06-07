@@ -192,7 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 Center(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
                     height: MediaQuery.of(context).size.height * 0.065,
                     child: FloatingActionButton(
@@ -220,18 +220,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   TextField(
                                     controller: emailController,
-                                    decoration:
-                                        InputDecoration(labelText: 'Email'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Email'),
                                   ),
                                   TextField(
                                     controller: phoneNumberController,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         labelText: 'Phone Number'),
                                   ),
                                   TextField(
                                     controller: addressController,
-                                    decoration:
-                                        InputDecoration(labelText: 'Address'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Address'),
                                   ),
                                 ],
                               ),
@@ -240,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Cancel'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -251,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     });
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Save'),
+                                  child: const Text('Save'),
                                 ),
                               ],
                             );
