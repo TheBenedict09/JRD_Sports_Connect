@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/user_pages/HomePage/home_page_updates.dart';
 import 'package:jrd_s_c/colors.dart';
@@ -10,8 +11,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final services = FirebaseFirestore.instance.collection("Events");
   String greetingMessage = "";
   double x = 1.2;
+
   @override
   void initState() {
     super.initState();
@@ -30,66 +33,111 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  TimeOfDay _timeFromString(String timeString) {
+    final format = RegExp(r'(\d+):(\d+)\s(\w{2})');
+    final match = format.firstMatch(timeString);
+    if (match != null) {
+      final hour = int.parse(match.group(1)!);
+      final minute = int.parse(match.group(2)!);
+      final period = match.group(3)!;
+
+      final adjustedHour = period == 'PM' && hour != 12
+          ? hour + 12
+          : period == 'AM' && hour == 12
+              ? 0
+              : hour;
+
+      return TimeOfDay(hour: adjustedHour, minute: minute);
+    } else {
+      throw const FormatException('Invalid time format');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Stack(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("Events").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          final events = snapshot.data?.docs ?? [];
+          return Stack(
             children: [
               BigGreyCircle(x: x),
-            ],
-          ),
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        greetingMessage,
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            greetingMessage,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 50,
+                                    color: c5),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Updates:",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w900,
-                            fontSize: 50,
-                            color: c5),
+                            fontSize: 25,
+                            color: c3),
                       ),
-                    ],
-                  ),
+                    ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        var event = events[index];
+                        TimeOfDay startTime =
+                            _timeFromString(event['startTime']);
+                        TimeOfDay endTime = _timeFromString(event['endTime']);
+                        DateTime startDate =
+                            DateTime.parse(event['startDate']);
+                        return Column(
+                          children: [
+                            HomePageElement(
+                              title: event['title'],
+                              desc: event['Desc'],
+                              date: '${startDate.toLocal()}'.split(' ')[0],
+                              startTime: startTime,
+                              endTime: endTime,
+                            ),
+                            if (index < events.length - 1)
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 38),
+                                child: Divider(),
+                              ),
+                          ],
+                        );
+                      },
+                      itemCount: events.length,
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Updates:",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900, fontSize: 25, color: c3),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.14 * 5,
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return const HomePageElement();
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.only(left: 38, right: 38),
-                        child: Divider(),
-                      );
-                    },
-                    itemCount: 5,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }

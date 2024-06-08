@@ -4,8 +4,17 @@ import 'package:jrd_s_c/colors.dart';
 class HomePageElement extends StatelessWidget {
   const HomePageElement({
     super.key,
+    required this.title,
+    required this.desc,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
   });
-
+  final String title;
+  final String desc;
+  final String date;
+  final TimeOfDay startTime;
+  final TimeOfDay endTime;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,12 +25,41 @@ class HomePageElement extends StatelessWidget {
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
-          title: Text("Update Title",
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text("Description"),
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+            ),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Text(
+                date,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xffB80C09),
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                desc,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
           trailing: Text(
-            "D&T",
-            style: TextStyle(color: c1),
+            "${startTime.format(context)} - ${endTime.format(context)}",
+            style: TextStyle(
+              color: c1,
+              fontSize: 14,
+            ),
           ),
         ),
       ),
