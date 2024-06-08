@@ -60,10 +60,10 @@ class _HomePageState extends State<HomePage> {
         stream: FirebaseFirestore.instance.collection("Events").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong");
+            return const Text("Something went wrong");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
           final events = snapshot.data?.docs ?? [];
           return Stack(
