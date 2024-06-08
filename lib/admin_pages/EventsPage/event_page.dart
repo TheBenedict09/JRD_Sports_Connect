@@ -14,28 +14,18 @@ class AdminEventsPageState extends State<AdminEventsPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
-  final List<String> _daysOfWeek = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday'
-  ];
-  String? _startDay;
+  DateTime? _selectedDate;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
 
   Future<void> _addEvent() async {
     String title = _titleController.text;
-    String startDay = _startDay ?? '';
     String desc = _descController.text;
     String startTime = _startTime?.format(context) ?? '';
     String endTime = _endTime?.format(context) ?? '';
 
     if (title.isEmpty ||
-        startDay.isEmpty ||
+        _selectedDate == null ||
         desc.isEmpty ||
         startTime.isEmpty ||
         endTime.isEmpty) {
@@ -50,7 +40,7 @@ class AdminEventsPageState extends State<AdminEventsPage> {
       {
         'title': title,
         'Desc': desc,
-        'startDay': startDay,
+        'startDate': _selectedDate?.toIso8601String(),
         'startTime': startTime,
         'endTime': endTime,
       },
@@ -59,7 +49,7 @@ class AdminEventsPageState extends State<AdminEventsPage> {
     _titleController.clear();
     _descController.clear();
     setState(() {
-      _startDay = null;
+      _selectedDate = null;
       _startTime = null;
       _endTime = null;
     });
@@ -78,20 +68,23 @@ class AdminEventsPageState extends State<AdminEventsPage> {
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Title'),
               ),
-              DropdownButton<String>(
-                hint: const Text('Select Starting Day'),
-                value: _startDay,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _startDay = newValue;
-                  });
-                },
-                items: _daysOfWeek.map<DropdownMenuItem<String>>((String day) {
-                  return DropdownMenuItem<String>(
-                    value: day,
-                    child: Text(day),
+              TextButton(
+                onPressed: () async {
+                  DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
                   );
-                }).toList(),
+                  if (picked != null) {
+                    setState(() {
+                      _selectedDate = picked;
+                    });
+                  }
+                },
+                child: Text(_selectedDate == null
+                    ? 'Select Date'
+                    : 'Date: ${_selectedDate!.toLocal()}'.split(' ')[0]),
               ),
               TextButton(
                 onPressed: () async {
@@ -179,7 +172,7 @@ class AdminEventsPageState extends State<AdminEventsPage> {
         height: MediaQuery.of(context).size.height * 0.07,
         child: FloatingActionButton(
           onPressed: _showAddEventDialog,
-          backgroundColor: c10,
+          backgroundColor: Colors.blueAccent,
           child: Text(
             "Add new Event",
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -222,9 +215,10 @@ class AdminEventsPageState extends State<AdminEventsPage> {
                     var event = events[index];
                     TimeOfDay startTime = _timeFromString(event['startTime']);
                     TimeOfDay endTime = _timeFromString(event['endTime']);
+                    DateTime startDate = DateTime.parse(event['startDate']);
                     return AdminEventsElements(
                       title: event['title'],
-                      startDay: event['startDay'],
+                      startDay: '${startDate.toLocal()}'.split(' ')[0],
                       startTime: startTime,
                       id: event.id,
                       endTime: endTime,

@@ -59,10 +59,10 @@ class AdminEventsElements extends StatelessWidget {
   }
 
   void _showEditServiceDialog(BuildContext context) {
-    TextEditingController titleController = TextEditingController(text: title);
-    TextEditingController descController = TextEditingController(text: desc);
+    final titleController = TextEditingController(text: title);
+    final descController = TextEditingController(text: desc);
 
-    String updatedStartDay = startDay;
+    DateTime selectedDate = DateTime.parse(startDay);
     TimeOfDay updatedStartTime = startTime;
     TimeOfDay updatedEndTime = endTime;
 
@@ -71,63 +71,69 @@ class AdminEventsElements extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Edit Event'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
-              ),
-              DropdownButton<String>(
-                hint: const Text('Select Starting Day'),
-                value: updatedStartDay,
-                onChanged: (String? newValue) {
-                  if (newValue != null) updatedStartDay = newValue;
-                },
-                items: [
-                  'Monday',
-                  'Tuesday',
-                  'Wednesday',
-                  'Thursday',
-                  'Friday',
-                  'Saturday',
-                  'Sunday'
-                ].map<DropdownMenuItem<String>>((String day) {
-                  return DropdownMenuItem<String>(
-                    value: day,
-                    child: Text(day),
-                  );
-                }).toList(),
-              ),
-              TextButton(
-                onPressed: () async {
-                  TimeOfDay? picked = await showTimePicker(
-                    context: context,
-                    initialTime: startTime,
-                  );
-                  if (picked != null && picked != updatedStartTime) {
-                    updatedStartTime = picked;
-                  }
-                },
-                child: Text('Start Time: ${updatedStartTime.format(context)}'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  TimeOfDay? picked = await showTimePicker(
-                    context: context,
-                    initialTime: endTime,
-                  );
-                  if (picked != null && picked != updatedEndTime) {
-                    updatedEndTime = picked;
-                  }
-                },
-                child: Text('End Time: ${updatedEndTime.format(context)}'),
-              ),
-              TextField(
-                controller: descController,
-                decoration: const InputDecoration(labelText: 'Description'),
-              ),
-            ],
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: titleController,
+                    decoration: const InputDecoration(labelText: 'Title'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        setState(() {
+                          selectedDate = pickedDate;
+                        });
+                      }
+                    },
+                    child: Text(
+                      'Date: ${selectedDate.toLocal()}'.split(' ')[0],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: updatedStartTime,
+                      );
+                      if (pickedTime != null) {
+                        setState(() {
+                          updatedStartTime = pickedTime;
+                        });
+                      }
+                    },
+                    child:
+                        Text('Start Time: ${updatedStartTime.format(context)}'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: updatedEndTime,
+                      );
+                      if (pickedTime != null) {
+                        setState(() {
+                          updatedEndTime = pickedTime;
+                        });
+                      }
+                    },
+                    child: Text('End Time: ${updatedEndTime.format(context)}'),
+                  ),
+                  TextField(
+                    controller: descController,
+                    decoration: const InputDecoration(labelText: 'Description'),
+                  ),
+                ],
+              );
+            },
           ),
           actions: <Widget>[
             TextButton(
@@ -138,12 +144,9 @@ class AdminEventsElements extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                FirebaseFirestore.instance
-                    .collection('Events')
-                    .doc(id)
-                    .update({
+                FirebaseFirestore.instance.collection('Events').doc(id).update({
                   'title': titleController.text,
-                  'startDay': updatedStartDay,
+                  'startDate': selectedDate.toIso8601String(),
                   'Desc': descController.text,
                   'startTime': updatedStartTime.format(context),
                   'endTime': updatedEndTime.format(context),
@@ -170,7 +173,7 @@ class AdminEventsElements extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: c10.withOpacity(0.3),
+          color: Colors.blueAccent.withOpacity(0.5),
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
