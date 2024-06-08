@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:jrd_s_c/admin_pages/event_page.dart';
+import 'package:jrd_s_c/admin_pages/EventsPage/event_page.dart';
 import 'package:jrd_s_c/admin_pages/report.dart';
 import 'package:jrd_s_c/admin_pages/ServicesPage/services_page.dart';
 import 'package:jrd_s_c/colors.dart';
@@ -18,7 +18,7 @@ class _AdminBottomNavBarPageState extends State<AdminBottomNavBarPage> {
 
   static const List<Widget> _widgetsOptions = <Widget>[
     AdminServicesPage(),
-    AdminEventPage(),
+    AdminEventsPage(),
     AdminReportPage(),
   ];
   @override

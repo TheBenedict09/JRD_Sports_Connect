@@ -2,23 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/colors.dart';
 
-class AdminServicesElements extends StatelessWidget {
+class AdminEventsElements extends StatelessWidget {
   final String id;
   final String title;
   final String startDay;
-  final String endDay;
+  final String desc;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
 
-  const AdminServicesElements({
-    super.key,
+  const AdminEventsElements({
+    Key? key,
     required this.id,
     required this.title,
     required this.startDay,
-    required this.endDay,
+    required this.desc,
     required this.startTime,
     required this.endTime,
-  });
+  }) : super(key: key);
 
   void _showEditDeleteDialog(BuildContext context) {
     showDialog(
@@ -26,12 +26,12 @@ class AdminServicesElements extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit or Delete Service',
+            'Edit or Delete Event',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w900, fontSize: 23, color: c5),
           ),
           content: Text(
-            'Would you like to edit or delete this service?',
+            'Would you like to edit or delete this event?',
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
@@ -60,16 +60,17 @@ class AdminServicesElements extends StatelessWidget {
 
   void _showEditServiceDialog(BuildContext context) {
     TextEditingController titleController = TextEditingController(text: title);
-    String? updatedStartDay = startDay;
-    String? updatedEndDay = endDay;
-    TimeOfDay? updatedStartTime = startTime;
-    TimeOfDay? updatedEndTime = endTime;
+    TextEditingController descController = TextEditingController(text: desc);
+
+    String updatedStartDay = startDay;
+    TimeOfDay updatedStartTime = startTime;
+    TimeOfDay updatedEndTime = endTime;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Edit Service'),
+          title: const Text('Edit Event'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -81,28 +82,7 @@ class AdminServicesElements extends StatelessWidget {
                 hint: const Text('Select Starting Day'),
                 value: updatedStartDay,
                 onChanged: (String? newValue) {
-                  updatedStartDay = newValue;
-                },
-                items: [
-                  'Monday',
-                  'Tuesday',
-                  'Wednesday',
-                  'Thursday',
-                  'Friday',
-                  'Saturday',
-                  'Sunday'
-                ].map<DropdownMenuItem<String>>((String day) {
-                  return DropdownMenuItem<String>(
-                    value: day,
-                    child: Text(day),
-                  );
-                }).toList(),
-              ),
-              DropdownButton<String>(
-                hint: const Text('Select Ending Day'),
-                value: updatedEndDay,
-                onChanged: (String? newValue) {
-                  updatedEndDay = newValue;
+                  if (newValue != null) updatedStartDay = newValue;
                 },
                 items: [
                   'Monday',
@@ -129,9 +109,7 @@ class AdminServicesElements extends StatelessWidget {
                     updatedStartTime = picked;
                   }
                 },
-                child: Text(updatedStartTime == null
-                    ? 'Select Start Time'
-                    : 'Start Time: ${updatedStartTime!.format(context)}'),
+                child: Text('Start Time: ${updatedStartTime.format(context)}'),
               ),
               TextButton(
                 onPressed: () async {
@@ -143,9 +121,11 @@ class AdminServicesElements extends StatelessWidget {
                     updatedEndTime = picked;
                   }
                 },
-                child: Text(updatedEndTime == null
-                    ? 'Select End Time'
-                    : 'End Time: ${updatedEndTime!.format(context)}'),
+                child: Text('End Time: ${updatedEndTime.format(context)}'),
+              ),
+              TextField(
+                controller: descController,
+                decoration: const InputDecoration(labelText: 'Description'),
               ),
             ],
           ),
@@ -159,14 +139,14 @@ class AdminServicesElements extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 FirebaseFirestore.instance
-                    .collection('Services')
+                    .collection('Events')
                     .doc(id)
                     .update({
                   'title': titleController.text,
                   'startDay': updatedStartDay,
-                  'endDay': updatedEndDay,
-                  'startTime': updatedStartTime?.format(context),
-                  'endTime': updatedEndTime?.format(context),
+                  'Desc': descController.text,
+                  'startTime': updatedStartTime.format(context),
+                  'endTime': updatedEndTime.format(context),
                 });
                 Navigator.of(context).pop();
               },
@@ -179,15 +159,15 @@ class AdminServicesElements extends StatelessWidget {
   }
 
   void _deleteService(BuildContext context) {
-    FirebaseFirestore.instance.collection('Services').doc(id).delete();
+    FirebaseFirestore.instance.collection('Events').doc(id).delete();
     ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Service deleted')));
+        .showSnackBar(const SnackBar(content: Text('Event deleted')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
         decoration: BoxDecoration(
           color: c10.withOpacity(0.3),
@@ -204,7 +184,28 @@ class AdminServicesElements extends StatelessWidget {
               fontSize: 19,
             ),
           ),
-          subtitle: Text("$startDay - $endDay"),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Text(
+                startDay,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xffB80C09),
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                desc,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
           trailing: Text(
             "${startTime.format(context)} - ${endTime.format(context)}",
             style: TextStyle(
