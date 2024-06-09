@@ -292,20 +292,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       backgroundColor: c5,
                       onPressed: () async {
                         try {
-                          var secretUsername = "admin";
-                          var secretPassword = "abs";
-                          if (_email.text == secretUsername &&
-                              _password.text == secretPassword) {
-                            // Navigate to the secret page
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const AdminBottomNavBarPage(); // Your secret page
-                                },
-                              ),
-                            );
-                          } else {
                             UserCredential user = await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
                                     email: _email.text,
@@ -320,7 +306,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 },
                               ),
                             );
-                          }
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Failed to register: $e")),

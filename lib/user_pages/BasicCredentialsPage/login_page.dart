@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jrd_s_c/admin_pages/utilities/admin_bottom_navbar.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
 import 'package:jrd_s_c/user_pages/BasicCredentialsPage/registration_page.dart';
 import 'package:jrd_s_c/user_pages/utilities/bottom_navbar.dart';
@@ -21,18 +22,32 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _email.text,
-        password: _password.text,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return const BottomNavBarPage();
-          },
-        ),
-      );
+      var secretUsername = "admin";
+      var secretPassword = "abs";
+      if (_email.text == secretUsername && _password.text == secretPassword) {
+        // Navigate to the secret page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const AdminBottomNavBarPage(); // Your secret page
+            },
+          ),
+        );
+      } else {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text,
+          password: _password.text,
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const BottomNavBarPage();
+            },
+          ),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       String message;
       switch (e.code) {

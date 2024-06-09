@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -74,76 +77,140 @@ class _ProfilePageState extends State<ProfilePage> {
         height: MediaQuery.of(context).size.height * 0.065,
         child: FloatingActionButton(
           onPressed: () {
-            emailController.text = email;
-            companyIDController.text = companyID;
-            departmentIDController.text = departmentID;
-
             showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text(
-                    'Edit Profile',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.bold, color: c8),
-                  ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TextField(
-                        controller: emailController,
-                        decoration: const InputDecoration(labelText: 'Email'),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.065,
+                        child: FloatingActionButton(
+                          backgroundColor: c10,
+                          child: Text(
+                            "Edit",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          onPressed: () {
+                            emailController.text = email;
+                            companyIDController.text = companyID;
+                            departmentIDController.text = departmentID;
+
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'Edit Profile',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: c8),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        controller: emailController,
+                                        decoration: const InputDecoration(
+                                            labelText: 'Email'),
+                                      ),
+                                      TextField(
+                                        controller: companyIDController,
+                                        decoration: const InputDecoration(
+                                            labelText: 'Company ID'),
+                                      ),
+                                      TextField(
+                                        controller: departmentIDController,
+                                        decoration: const InputDecoration(
+                                            labelText: 'Department ID'),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          email = emailController.text;
+                                          companyID = companyIDController.text;
+                                          departmentID =
+                                              departmentIDController.text;
+                                        });
+                                        try {
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                              .update({
+                                            'email': email,
+                                            'companyID': companyID,
+                                            'deptID': departmentID,
+                                          });
+                                        } catch (e) {
+                                          print("Error updating user data: $e");
+                                        }
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Save'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                      TextField(
-                        controller: companyIDController,
-                        decoration:
-                            const InputDecoration(labelText: 'Company ID'),
-                      ),
-                      TextField(
-                        controller: departmentIDController,
-                        decoration:
-                            const InputDecoration(labelText: 'Department ID'),
-                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.27,
+                        height: MediaQuery.of(context).size.height * 0.065,
+                        child: FloatingActionButton(
+                          backgroundColor: c10,
+                          child: Text(
+                            "Logout",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const LoginPage();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        setState(() {
-                          email = emailController.text;
-                          companyID = companyIDController.text;
-                          departmentID = departmentIDController.text;
-                        });
-                        try {
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .update({
-                            'email': email,
-                            'companyID': companyID,
-                            'deptID': departmentID,
-                          });
-                        } catch (e) {
-                          print("Error updating user data: $e");
-                        }
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Save'),
-                    ),
-                  ],
                 );
               },
             );
           },
           backgroundColor: c9,
           child: Text(
-            "Edit",
+            "Settings",
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

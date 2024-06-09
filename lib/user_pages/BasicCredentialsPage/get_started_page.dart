@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/registration_page.dart';
 
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
@@ -66,7 +67,16 @@ class _GetStartedPageState extends State<GetStartedPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return RegistrationPage();
+                        },
+                      ),
+                    );
+                  },
                   child: Text(
                     "Get Started >",
                     style: Theme.of(context).textTheme.bodyLarge,
