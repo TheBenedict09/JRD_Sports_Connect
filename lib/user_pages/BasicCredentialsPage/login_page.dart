@@ -1,5 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/registration_page.dart';
+import 'package:jrd_s_c/user_pages/utilities/bottom_navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,7 +14,56 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
   double x = 0.9;
+
+  Future<void> _login() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _email.text,
+        password: _password.text,
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return const BottomNavBarPage();
+          },
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      String message;
+      switch (e.code) {
+        case 'user-not-found':
+          message = 'No user found for that email.';
+          break;
+        case 'wrong-password':
+          message = 'Wrong password provided.';
+          break;
+        case 'invalid-email':
+          message = 'The email address is not valid.';
+          break;
+        default:
+          message = 'An unknown error occurred.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('An unknown error occurred.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,110 +98,126 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.17,
-              ),
-              Center(
-                child: Text(
-                  "Login",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: c3,
-                        fontSize: MediaQuery.of(context).size.width * 0.12,
-                      ),
-                  textAlign: TextAlign.center,
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.17,
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.13,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 28, right: 28),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: c3.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(22)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Enter Username",
-                      hintStyle: Theme.of(context).textTheme.bodyLarge
-                        ?..copyWith(color: c3),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: c3, width: 3),
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22),
-                        borderSide: BorderSide(color: c3, width: 2.3),
+                Center(
+                  child: Text(
+                    "Login",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: c3,
+                          fontSize: MediaQuery.of(context).size.width * 0.12,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.13,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 28, right: 28),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: c3.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(22)),
+                    child: TextField(
+                      controller: _email,
+                      decoration: InputDecoration(
+                        hintText: "Enter Email",
+                        hintStyle: Theme.of(context).textTheme.bodyLarge
+                          ?..copyWith(color: c3),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: c3, width: 3),
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(22),
+                          borderSide: BorderSide(color: c3, width: 2.3),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 28, right: 28),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: c3.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(22)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Enter Password",
-                      hintStyle: Theme.of(context).textTheme.bodyLarge
-                        ?..copyWith(color: Colors.white),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: c3, width: 1.3),
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22),
-                        borderSide: BorderSide(color: c3, width: 2.3),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 28, right: 28),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: c3.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(22)),
+                    child: TextField(
+                      controller: _password,
+                      decoration: InputDecoration(
+                        hintText: "Enter Password",
+                        hintStyle: Theme.of(context).textTheme.bodyLarge
+                          ?..copyWith(color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: c3, width: 1.3),
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(22),
+                          borderSide: BorderSide(color: c3, width: 2.3),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 28, right: 28),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.07,
-                  child: FloatingActionButton(
-                    backgroundColor: c5,
-                    onPressed: () {},
-                    child: Text(
-                      "Login",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width * 0.06,
-                          ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 28, right: 28),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    child: FloatingActionButton(
+                      backgroundColor: c5,
+                      onPressed: _login,
+                      child: Text(
+                        "Login",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.white,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.06,
+                            ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.24,
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text("New User?"),
-                    TextButton(onPressed: () {}, child: const Text("Register"))
-                  ],
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.24,
                 ),
-              ),
-            ],
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text("New User?"),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const RegistrationPage();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text("Register"))
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

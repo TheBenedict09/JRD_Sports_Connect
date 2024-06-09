@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously, unused_local_variable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/admin_pages/utilities/admin_bottom_navbar.dart';
-import 'package:jrd_s_c/colors.dart';
-import 'package:jrd_s_c/user_pages/HomePage/home_page.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:jrd_s_c/user_pages/BasicCredentialsPage/login_page.dart';
 import 'package:jrd_s_c/user_pages/utilities/bottom_navbar.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -19,34 +17,39 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _gender = TextEditingController();
   final TextEditingController _departmentID = TextEditingController();
   final TextEditingController _companyID = TextEditingController();
+  String? _selectedGender; // Store selected gender
 
   Future<void> _addCredentials() async {
     String name = _name.text;
     String email = _email.text;
-    String gender = _gender.text;
+    String? gender = _selectedGender; // Get selected gender
     String departmentID = _departmentID.text;
     String companyID = _companyID.text;
 
     if (name.isEmpty ||
         email.isEmpty ||
-        gender.isEmpty ||
+        gender == null ||
         departmentID.isEmpty ||
         companyID.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please fill in all fields')));
       return;
     }
-    CollectionReference user = FirebaseFirestore.instance.collection("users");
-    await user.add({
-      'name': name,
-      'email': email,
-      'deptID': departmentID,
-      'companyID': companyID,
-      'gender': gender
-    });
+
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      String uid = currentUser.uid;
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'name': name,
+        'email': email,
+        'deptID': departmentID,
+        'companyID': companyID,
+        'gender': gender,
+        'uid': uid,
+      });
+    }
   }
 
   double x = 0.9;
@@ -67,7 +70,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   width: MediaQuery.of(context).size.width * x * 1.1,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c4,
+                    color: c10,
                   ),
                 ),
               ),
@@ -79,7 +82,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   width: MediaQuery.of(context).size.width * x,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: c10,
+                    color: c2,
                   ),
                 ),
               ),
@@ -220,10 +223,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     decoration: BoxDecoration(
                         color: c3.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(22)),
-                    child: TextField(
-                      controller: _gender,
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedGender,
                       decoration: InputDecoration(
-                        labelText: "Enter Gender",
+                        labelText: "Select Gender",
                         labelStyle: Theme.of(context).textTheme.bodyLarge
                           ?..copyWith(color: Colors.white),
                         border: OutlineInputBorder(
@@ -235,6 +238,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           borderSide: BorderSide(color: c3, width: 2.3),
                         ),
                       ),
+                      items: ['Male', 'Female', 'Others'].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedGender = newValue;
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -249,6 +263,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         borderRadius: BorderRadius.circular(22)),
                     child: TextField(
                       controller: _password,
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: "Enter Password",
                         labelStyle: Theme.of(context).textTheme.bodyLarge
@@ -277,7 +292,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       backgroundColor: c5,
                       onPressed: () async {
                         try {
-                          await _addCredentials();
                           var secretUsername = "admin";
                           var secretPassword = "abs";
                           if (_email.text == secretUsername &&
@@ -296,7 +310,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 .createUserWithEmailAndPassword(
                                     email: _email.text,
                                     password: _password.text);
-                            print("User registered: ${user.user?.email}");
+                            await _addCredentials();
+
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -307,7 +322,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             );
                           }
                         } catch (e) {
-                          print("Error: $e");
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Failed to register: $e")),
                           );
@@ -332,8 +346,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Text("Already a User?"),
-                      TextButton(onPressed: () {}, child: const Text("Login"))
+                      const Text(
+                        "Already a User?",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const LoginPage();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Login",
+                          style: TextStyle(color: c10),
+                        ),
+                      )
                     ],
                   ),
                 ),

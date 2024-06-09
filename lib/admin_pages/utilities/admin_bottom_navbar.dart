@@ -3,7 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:jrd_s_c/admin_pages/EventsPage/event_page.dart';
 import 'package:jrd_s_c/admin_pages/report.dart';
 import 'package:jrd_s_c/admin_pages/ServicesPage/services_page.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class AdminBottomNavBarPage extends StatefulWidget {
   final dynamic data;

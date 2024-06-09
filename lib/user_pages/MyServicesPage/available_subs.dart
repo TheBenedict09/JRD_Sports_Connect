@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class AvailableSubscriptionPage extends StatefulWidget {
   const AvailableSubscriptionPage({super.key});

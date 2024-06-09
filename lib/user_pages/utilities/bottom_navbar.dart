@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:jrd_s_c/user_pages/HomePage/home_page.dart';
 import 'package:jrd_s_c/user_pages/MyServicesPage/my_services_page.dart';
 import 'package:jrd_s_c/user_pages/ProfilePage/profile_page.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class BottomNavBarPage extends StatefulWidget {
   final dynamic data;

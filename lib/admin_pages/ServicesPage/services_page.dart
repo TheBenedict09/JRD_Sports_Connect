@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jrd_s_c/admin_pages/ServicesPage/services_page_elements.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class AdminServicesPage extends StatefulWidget {
   const AdminServicesPage({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class HomePageElement extends StatelessWidget {
   const HomePageElement({

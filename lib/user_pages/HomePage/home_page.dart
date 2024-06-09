@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/user_pages/HomePage/home_page_updates.dart';
-import 'package:jrd_s_c/colors.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -111,8 +112,7 @@ class _HomePageState extends State<HomePage> {
                         TimeOfDay startTime =
                             _timeFromString(event['startTime']);
                         TimeOfDay endTime = _timeFromString(event['endTime']);
-                        DateTime startDate =
-                            DateTime.parse(event['startDate']);
+                        DateTime startDate = DateTime.parse(event['startDate']);
                         return Column(
                           children: [
                             HomePageElement(
