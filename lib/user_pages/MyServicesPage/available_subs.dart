@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -115,7 +115,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                           child: Text(
                             "Available Subscriptions:",
                             style:
-                                Theme.of(context).textTheme.bodyText1?.copyWith(
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       fontWeight: FontWeight.w900,
                                       fontSize: 50,
                                     ),

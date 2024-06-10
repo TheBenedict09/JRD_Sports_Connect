@@ -1,7 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jrd_s_c/admin_pages/utilities/admin_bottom_navbar.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
 import 'package:jrd_s_c/user_pages/BasicCredentialsPage/login_page.dart';
 import 'package:jrd_s_c/user_pages/utilities/bottom_navbar.dart';
@@ -292,20 +293,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       backgroundColor: c5,
                       onPressed: () async {
                         try {
-                            UserCredential user = await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                    email: _email.text,
-                                    password: _password.text);
-                            await _addCredentials();
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: _email.text, password: _password.text);
+                          await _addCredentials();
 
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const BottomNavBarPage();
-                                },
-                              ),
-                            );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const BottomNavBarPage();
+                              },
+                            ),
+                          );
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Failed to register: $e")),
