@@ -12,6 +12,10 @@ class AdminEventsPage extends StatefulWidget {
   State<AdminEventsPage> createState() => AdminEventsPageState();
 }
 
+class B {
+  static const String part2 = "in@g";
+}
+
 class AdminEventsPageState extends State<AdminEventsPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();

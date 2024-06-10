@@ -4,13 +4,12 @@ import 'package:jrd_s_c/admin_pages/ServicesPage/services_page_elements.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class AdminServicesPage extends StatefulWidget {
-  const AdminServicesPage({super.key});
+  const AdminServicesPage({Key? key}) : super(key: key);
 
   @override
   State<AdminServicesPage> createState() => Admin_ServicesPageState();
 }
 
-// ignore: camel_case_types
 class Admin_ServicesPageState extends State<AdminServicesPage> {
   final TextEditingController _titleController = TextEditingController();
   final List<String> _daysOfWeek = [
@@ -143,7 +142,6 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
               child: const Text('Add'),
               onPressed: () async {
                 await _addService();
-                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
             ),

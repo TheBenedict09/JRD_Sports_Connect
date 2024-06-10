@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:lottie/lottie.dart';
 
 class AvailableSubscriptionPage extends StatefulWidget {
   const AvailableSubscriptionPage({Key? key});
@@ -57,8 +60,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream:
-            FirebaseFirestore.instance.collection("Services").snapshots(),
+        stream: FirebaseFirestore.instance.collection("Services").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return const Center(child: Text("Something went wrong"));
@@ -68,7 +70,8 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
           }
           var services = snapshot.data?.docs ?? [];
           var availableServices = services
-              .where((service) => !subscribedServices.contains(service['title']))
+              .where(
+                  (service) => !subscribedServices.contains(service['title']))
               .toList();
           return Stack(
             children: [
@@ -116,38 +119,62 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                             ),
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.14 * 5,
-                      child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          var service = availableServices[index];
-                          TimeOfDay startTime =
-                              _timeFromString(service['startTime']);
-                          TimeOfDay endTime =
-                              _timeFromString(service['endTime']);
-                          return NewSubElement(
-                            title: service['title'],
-                            startTime: startTime,
-                            endTime: endTime,
-                            startDay: service['startDay'],
-                            endDay: service['endDay'],
-                            id: service.id,
-                            onSubscribe: () {
-                              _fetchSubscribedServices();
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Padding(
-                            padding: EdgeInsets.only(left: 38, right: 38),
-                            child: Divider(),
-                          );
-                        },
-                        itemCount: availableServices.length,
-                      ),
-                    ),
+                    availableServices.isEmpty
+                        ? Center(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.13,
+                                ),
+                                Lottie.asset('assets/animations/archer.json',
+                                    height: 200, width: 200),
+                                Text(
+                                  'No Available Subscription',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 25,
+                                          color: c4),
+                                )
+                              ],
+                            ),
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height:
+                                MediaQuery.of(context).size.height * 0.14 * 5,
+                            child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                var service = availableServices[index];
+                                TimeOfDay startTime =
+                                    _timeFromString(service['startTime']);
+                                TimeOfDay endTime =
+                                    _timeFromString(service['endTime']);
+                                return NewSubElement(
+                                  title: service['title'],
+                                  startTime: startTime,
+                                  endTime: endTime,
+                                  startDay: service['startDay'],
+                                  endDay: service['endDay'],
+                                  id: service.id,
+                                  onSubscribe: () {
+                                    _fetchSubscribedServices();
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(left: 38, right: 38),
+                                  child: Divider(),
+                                );
+                              },
+                              itemCount: availableServices.length,
+                            ),
+                          ),
                   ],
                 ),
               ),

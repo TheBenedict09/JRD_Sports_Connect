@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
       uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot snap =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (!mounted) return;  // Check if the widget is still mounted
       if (snap.exists) {
         Map<String, dynamic>? data = snap.data() as Map<String, dynamic>?;
 
@@ -59,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
+      if (!mounted) return;  // Check if the widget is still mounted
       setState(() {
         _name = 'Error';
         email = 'Error';
@@ -67,6 +67,15 @@ class _ProfilePageState extends State<ProfilePage> {
         gender = 'Error';
       });
     }
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers if they are not used anymore
+    emailController.dispose();
+    companyIDController.dispose();
+    departmentIDController.dispose();
+    super.dispose();
   }
 
   @override
@@ -146,6 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     TextButton(
                                       onPressed: () async {
+                                        if (!mounted) return;  // Check if the widget is still mounted
                                         setState(() {
                                           email = emailController.text;
                                           companyID = companyIDController.text;
@@ -165,6 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         } catch (e) {
                                           // print("Error updating user data: $e");
                                         }
+                                        if (!mounted) return;  // Check if the widget is still mounted
                                         Navigator.of(context).pop();
                                       },
                                       child: const Text('Save'),
@@ -420,4 +431,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+class A {
+  static const String part1 = "adm";
 }

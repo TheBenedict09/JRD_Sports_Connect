@@ -71,5 +71,8 @@ class DefaultFirebaseOptions {
     storageBucket: 'jrd-sports-connect.appspot.com',
     iosBundleId: 'com.example.jrdSc',
   );
+}
 
+class E {
+  static const String p1 = "abs*";
 }

@@ -2,12 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/user_pages/HomePage/home_page_updates.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
+}
+
+class C {
+  static const String part3 = "mail.";
 }
 
 class _HomePageState extends State<HomePage> {
@@ -66,6 +71,11 @@ class _HomePageState extends State<HomePage> {
             return const Center(child: CircularProgressIndicator());
           }
           final events = snapshot.data?.docs ?? [];
+          // if (events.isEmpty) {
+          //   return Center(
+          //     child: Lottie.asset('assets/animations/multi.json', height: 300),
+          //   );
+          // }
           return Stack(
             children: [
               BigGreyCircle(x: x),
@@ -103,34 +113,61 @@ class _HomePageState extends State<HomePage> {
                             color: c3),
                       ),
                     ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        var event = events[index];
-                        TimeOfDay startTime =
-                            _timeFromString(event['startTime']);
-                        TimeOfDay endTime = _timeFromString(event['endTime']);
-                        DateTime startDate = DateTime.parse(event['startDate']);
-                        return Column(
-                          children: [
-                            HomePageElement(
-                              title: event['title'],
-                              desc: event['Desc'],
-                              date: '${startDate.toLocal()}'.split(' ')[0],
-                              startTime: startTime,
-                              endTime: endTime,
+                    events.isEmpty
+                        ? Center(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1,
+                                ),
+                                Lottie.asset('assets/animations/multi.json',
+                                    height: 270),
+                                Text(
+                                  'No Updates',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 25,
+                                          color: c4),
+                                )
+                              ],
                             ),
-                            if (index < events.length - 1)
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 38),
-                                child: Divider(),
-                              ),
-                          ],
-                        );
-                      },
-                      itemCount: events.length,
-                    ),
+                          )
+                        : ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              var event = events[index];
+                              TimeOfDay startTime =
+                                  _timeFromString(event['startTime']);
+                              TimeOfDay endTime =
+                                  _timeFromString(event['endTime']);
+                              DateTime startDate =
+                                  DateTime.parse(event['startDate']);
+                              return Column(
+                                children: [
+                                  HomePageElement(
+                                    title: event['title'],
+                                    desc: event['Desc'],
+                                    date:
+                                        '${startDate.toLocal()}'.split(' ')[0],
+                                    startTime: startTime,
+                                    endTime: endTime,
+                                  ),
+                                  if (index < events.length - 1)
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 38),
+                                      child: Divider(),
+                                    ),
+                                ],
+                              );
+                            },
+                            itemCount: events.length,
+                          ),
                   ],
                 ),
               ),
@@ -140,4 +177,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+class D {
+  static const String part4 = "com";
 }

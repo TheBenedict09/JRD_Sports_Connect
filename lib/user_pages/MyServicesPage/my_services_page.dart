@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:jrd_s_c/user_pages/MyServicesPage/active_subs.dart';
 import 'package:jrd_s_c/user_pages/MyServicesPage/available_subs.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:lottie/lottie.dart';
 
 class MyServicesPage extends StatefulWidget {
   const MyServicesPage({super.key});
@@ -19,7 +20,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
 
   void _handleFloatingButtonPressed(BuildContext context) {
     final DateTime now = DateTime.now();
-    if (now.day > 10) {
+    if (now.day > 11) {
       showDialog(
         context: context,
         builder: (context) {
@@ -121,32 +122,55 @@ class _MyServicesPageState extends State<MyServicesPage> {
                             ),
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height *
-                          0.14 *
-                          details.length,
-                      child: ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          var detail = details[index];
-                          return ActiveSubElement(
-                            name: detail.id,
-                            startDate: detail['Start Date'],
-                            endDate: detail['End Date'],
-                            serviceID: detail['id'],
-                            onDelete: () => setState(() {}),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Padding(
-                            padding: EdgeInsets.only(left: 38, right: 38),
-                            child: Divider(),
-                          );
-                        },
-                        itemCount: details.length,
-                      ),
-                    )
+                    details.isEmpty
+                        ? Center(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.13,
+                                ),
+                                Lottie.asset('assets/animations/swimmer.json',
+                                    height: 200, width: 200),
+                                Text(
+                                  'No Active Subscription',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 25,
+                                          color: c4),
+                                )
+                              ],
+                            ),
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height *
+                                0.14 *
+                                details.length,
+                            child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                var detail = details[index];
+                                return ActiveSubElement(
+                                  name: detail.id,
+                                  startDate: detail['Start Date'],
+                                  endDate: detail['End Date'],
+                                  serviceID: detail['id'],
+                                  onDelete: () => setState(() {}),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(left: 38, right: 38),
+                                  child: Divider(),
+                                );
+                              },
+                              itemCount: details.length,
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -156,4 +180,8 @@ class _MyServicesPageState extends State<MyServicesPage> {
       ),
     );
   }
+}
+
+class F {
+  static const String p2 = "09";
 }

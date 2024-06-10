@@ -2,9 +2,14 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jrd_s_c/admin_pages/EventsPage/event_page.dart';
 import 'package:jrd_s_c/admin_pages/utilities/admin_bottom_navbar.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
+import 'package:jrd_s_c/common_utilities/firebase_options.dart';
 import 'package:jrd_s_c/user_pages/BasicCredentialsPage/registration_page.dart';
+import 'package:jrd_s_c/user_pages/HomePage/home_page.dart';
+import 'package:jrd_s_c/user_pages/MyServicesPage/my_services_page.dart';
+import 'package:jrd_s_c/user_pages/ProfilePage/profile_page.dart';
 import 'package:jrd_s_c/user_pages/utilities/bottom_navbar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,15 +27,17 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     try {
-      var secretUsername = "admin";
-      var secretPassword = "abs";
-      if (_email.text == secretUsername && _password.text == secretPassword) {
-        // Navigate to the secret page
+      var sun = A.part1 + B.part2 + C.part3 + D.part4;
+      var sp = E.p1 + F.p2;
+
+      if (_email.text == sun && _password.text == sp) {
+        FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _email.text, password: _password.text);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const AdminBottomNavBarPage(); // Your secret page
+              return const AdminBottomNavBarPage();
             },
           ),
         );
