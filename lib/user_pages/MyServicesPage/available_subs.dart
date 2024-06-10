@@ -115,7 +115,8 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                         "Available Subscriptions:",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w900,
-                              fontSize: 50,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.121,
                             ),
                       ),
                     ),
@@ -136,7 +137,10 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                                       .bodyLarge
                                       ?.copyWith(
                                           fontWeight: FontWeight.w900,
-                                          fontSize: 25,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.065,
                                           color: c4),
                                 )
                               ],
@@ -248,18 +252,26 @@ class _NewSubElementState extends State<NewSubElement> {
           },
           title: Text(
             widget.title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 19,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.065,
+                ),
           ),
-          subtitle: Text("${widget.startDay} - ${widget.endDay}"),
+          subtitle: Text(
+            "${widget.startDay} - ${widget.endDay}",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: c5.withOpacity(0.7),
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.043,
+                ),
+          ),
           trailing: Text(
             "${widget.startTime.format(context)} - ${widget.endTime.format(context)}",
-            style: TextStyle(
-              color: c1,
-              fontSize: 14,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: c1,
+                  fontSize: MediaQuery.of(context).size.width * 0.037,
+                ),
           ),
         ),
       ),
@@ -356,16 +368,14 @@ class _NewSubElementState extends State<NewSubElement> {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              "New Subscription Added",
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    fontSize: 25,
-                                  ),
+                          return Dialog(
+                            backgroundColor: Colors.black.withOpacity(0.7),
+                            insetPadding: EdgeInsets.zero,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Lottie.asset(
+                                  'assets/animations/success.json'),
                             ),
                           );
                         },

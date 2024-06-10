@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:jrd_s_c/common_utilities/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class ActiveSubElement extends StatelessWidget {
   const ActiveSubElement({
@@ -24,11 +24,11 @@ class ActiveSubElement extends StatelessWidget {
   String formatDate(String date) {
     final DateTime parsedDate = DateTime.parse(date);
     final day = DateFormat('d').format(parsedDate);
-    final suffix = day.endsWith('1') && day != '11'
+    final suffix = (day == '1' || day == '21' || day == '31')
         ? 'st'
-        : day.endsWith('2') && day != '12'
+        : (day == '2' || day == '22')
             ? 'nd'
-            : day.endsWith('3') && day != '13'
+            : (day == '3' || day == '23')
                 ? 'rd'
                 : 'th';
     final month = DateFormat('MMMM').format(parsedDate);
@@ -36,7 +36,12 @@ class ActiveSubElement extends StatelessWidget {
   }
 
   Future<void> _deleteService(BuildContext context) async {
-    FirebaseFirestore.instance.collection('Services').doc(serviceID).collection('subscribers').doc(FirebaseAuth.instance.currentUser?.uid).delete();
+    FirebaseFirestore.instance
+        .collection('Services')
+        .doc(serviceID)
+        .collection('subscribers')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .delete();
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Service deleted')));
     QuerySnapshot userSnapshot =
@@ -54,8 +59,9 @@ class ActiveSubElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String timeRange = "01 Jan - 10 Jan";
     final DateTime now = DateTime.now();
+    final String timeRange =
+        '${formatDate(startDate)} - ${formatDate(endDate)}';
 
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8),
@@ -86,7 +92,7 @@ class ActiveSubElement extends StatelessWidget {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
-                        if (now.day < 9) {
+                        if (now.day < 20) {
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -163,14 +169,15 @@ class ActiveSubElement extends StatelessWidget {
             name,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w900,
-                  fontSize: 23,
+                  fontSize: MediaQuery.of(context).size.width * 0.065,
                 ),
           ),
           subtitle: Text(
             '${formatDate(startDate)} - ${formatDate(endDate)}',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: c1,
-                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.043,
                 ),
           ),
         ),

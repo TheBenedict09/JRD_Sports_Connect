@@ -97,6 +97,13 @@ class AdminEventsPageState extends State<AdminEventsPage> {
                   TimeOfDay? picked = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay.now(),
+                    builder: (BuildContext context, Widget? child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: false),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null) {
                     setState(() {
@@ -113,6 +120,13 @@ class AdminEventsPageState extends State<AdminEventsPage> {
                   TimeOfDay? picked = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay.now(),
+                    builder: (BuildContext context, Widget? child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: false),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null) {
                     setState(() {
@@ -222,6 +236,8 @@ class AdminEventsPageState extends State<AdminEventsPage> {
                     TimeOfDay startTime = _timeFromString(event['startTime']);
                     TimeOfDay endTime = _timeFromString(event['endTime']);
                     DateTime startDate = DateTime.parse(event['startDate']);
+                    print(startTime);
+                    print(endTime);
                     return AdminEventsElements(
                       title: event['title'],
                       startDay: '${startDate.toLocal()}'.split(' ')[0],

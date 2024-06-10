@@ -110,7 +110,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.04,
+                      height: MediaQuery.of(context).size.height * 0.03,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -118,7 +118,8 @@ class _MyServicesPageState extends State<MyServicesPage> {
                         "Active Subscriptions:",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w900,
-                              fontSize: 50,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.121,
                             ),
                       ),
                     ),
@@ -139,7 +140,10 @@ class _MyServicesPageState extends State<MyServicesPage> {
                                       .bodyLarge
                                       ?.copyWith(
                                           fontWeight: FontWeight.w900,
-                                          fontSize: 25,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.065,
                                           color: c4),
                                 )
                               ],
@@ -148,7 +152,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                         : SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height *
-                                0.14 *
+                                0.15 *
                                 details.length,
                             child: ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),

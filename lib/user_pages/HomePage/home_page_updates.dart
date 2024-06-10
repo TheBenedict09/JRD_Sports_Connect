@@ -27,9 +27,9 @@ class HomePageElement extends StatelessWidget {
         child: ListTile(
           title: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 19,
+              fontSize: MediaQuery.of(context).size.width * 0.060,
             ),
           ),
           subtitle: Column(
@@ -40,26 +40,27 @@ class HomePageElement extends StatelessWidget {
               ),
               Text(
                 date,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xffB80C09),
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xffB80C09),
+                      fontSize: MediaQuery.of(context).size.width * 0.043,
+                    ),
               ),
               Text(
                 desc,
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: MediaQuery.of(context).size.width * 0.042,
+                    ),
               ),
             ],
           ),
           trailing: Text(
             "${startTime.format(context)} - ${endTime.format(context)}",
-            style: TextStyle(
-              color: c1,
-              fontSize: 14,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: c1,
+                  fontSize: MediaQuery.of(context).size.width * 0.037,
+                ),
           ),
         ),
       ),

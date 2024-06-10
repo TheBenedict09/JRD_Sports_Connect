@@ -71,11 +71,6 @@ class _HomePageState extends State<HomePage> {
             return const Center(child: CircularProgressIndicator());
           }
           final events = snapshot.data?.docs ?? [];
-          // if (events.isEmpty) {
-          //   return Center(
-          //     child: Lottie.asset('assets/animations/multi.json', height: 300),
-          //   );
-          // }
           return Stack(
             children: [
               BigGreyCircle(x: x),
@@ -97,7 +92,9 @@ class _HomePageState extends State<HomePage> {
                                 .bodyLarge
                                 ?.copyWith(
                                     fontWeight: FontWeight.w900,
-                                    fontSize: 50,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.121,
                                     color: c5),
                           ),
                         ],
@@ -109,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                         "Updates:",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w900,
-                            fontSize: 25,
+                            fontSize: MediaQuery.of(context).size.width * 0.065,
                             color: c3),
                       ),
                     ),

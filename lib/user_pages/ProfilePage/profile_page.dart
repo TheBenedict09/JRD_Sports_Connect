@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
       uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot snap =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      if (!mounted) return;  // Check if the widget is still mounted
+      if (!mounted) return; // Check if the widget is still mounted
       if (snap.exists) {
         Map<String, dynamic>? data = snap.data() as Map<String, dynamic>?;
 
@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
-      if (!mounted) return;  // Check if the widget is still mounted
+      if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         _name = 'Error';
         email = 'Error';
@@ -100,11 +100,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           backgroundColor: c10,
                           child: Text(
                             "Edit",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           onPressed: () {
                             emailController.text = email;
@@ -121,7 +124,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .textTheme
                                         .bodyLarge
                                         ?.copyWith(
-                                            fontSize: 20,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
                                             fontWeight: FontWeight.bold,
                                             color: c8),
                                   ),
@@ -155,7 +161,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     TextButton(
                                       onPressed: () async {
-                                        if (!mounted) return;  // Check if the widget is still mounted
+                                        if (!mounted)
+                                          return; // Check if the widget is still mounted
                                         setState(() {
                                           email = emailController.text;
                                           companyID = companyIDController.text;
@@ -175,7 +182,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         } catch (e) {
                                           // print("Error updating user data: $e");
                                         }
-                                        if (!mounted) return;  // Check if the widget is still mounted
+                                        if (!mounted)
+                                          return; // Check if the widget is still mounted
                                         Navigator.of(context).pop();
                                       },
                                       child: const Text('Save'),
@@ -194,11 +202,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           backgroundColor: c10,
                           child: Text(
                             "Logout",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                           onPressed: () {
                             FirebaseAuth.instance.signOut();
@@ -223,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Text(
             "Settings",
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 20,
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
                   fontWeight: FontWeight.bold,
                 ),
           ),
@@ -276,14 +287,14 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     _name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w900,
-                          fontSize: 50,
+                          fontSize: MediaQuery.of(context).size.width * 0.121,
                         ),
                   ),
                 ),
@@ -293,7 +304,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(
                     "Your Email",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -313,7 +324,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         email,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 20,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold,
                               color: c3,
                             ),
@@ -327,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(
                     "Company ID",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -347,7 +359,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         companyID,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 20,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold,
                               color: c3,
                             ),
@@ -361,7 +374,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(
                     "Department ID",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -381,7 +394,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         departmentID,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 20,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold,
                               color: c3,
                             ),
@@ -395,7 +409,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(
                     "Gender",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -415,7 +429,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         gender,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 20,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold,
                               color: c3,
                             ),
@@ -432,6 +447,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
 class A {
   static const String part1 = "adm";
 }
