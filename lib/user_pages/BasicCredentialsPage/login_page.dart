@@ -169,6 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(22)),
                     child: TextField(
                       controller: _password,
+                      obscureText: true,
                       decoration: InputDecoration(
                         hintText: "Enter Password",
                         hintStyle: Theme.of(context).textTheme.bodyLarge
