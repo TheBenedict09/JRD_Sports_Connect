@@ -60,7 +60,8 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
           }
           var subscribedServices = subscribedSnapshot.data ?? [];
           return StreamBuilder(
-            stream: FirebaseFirestore.instance.collection("Services").snapshots(),
+            stream:
+                FirebaseFirestore.instance.collection("Services").snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 return const Center(child: Text("Something went wrong"));
@@ -69,8 +70,10 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                 return const Center(child: CircularProgressIndicator());
               }
               var services = snapshot.data?.docs ?? [];
-              var availableServices = services.where((service) =>
-                  !subscribedServices.contains(service['title'])).toList();
+              var availableServices = services
+                  .where((service) =>
+                      !subscribedServices.contains(service['title']))
+                  .toList();
               return Stack(
                 children: [
                   Stack(
@@ -111,10 +114,11 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Available Subscriptions:",
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 50,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 50,
+                                    ),
                           ),
                         ),
                         SizedBox(
@@ -132,6 +136,8 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                                 title: service['title'],
                                 startTime: startTime,
                                 endTime: endTime,
+                                startDay: service['startDay'],
+                                endDay: service['endDay'],
                               );
                             },
                             separatorBuilder: (context, index) {
@@ -162,9 +168,13 @@ class NewSubElement extends StatefulWidget {
     required this.title,
     required this.startTime,
     required this.endTime,
+    required this.startDay,
+    required this.endDay,
   });
 
   final String title;
+  final String startDay;
+  final String endDay;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
 
@@ -246,6 +256,7 @@ class _NewSubElementState extends State<NewSubElement> {
               fontSize: 19,
             ),
           ),
+          subtitle: Text("${widget.startDay} - ${widget.endDay}"),
           trailing: Text(
             "${widget.startTime.format(context)} - ${widget.endTime.format(context)}",
             style: TextStyle(
@@ -336,9 +347,20 @@ class _NewSubElementState extends State<NewSubElement> {
                   child: const Text("OK"),
                   onPressed: () async {
                     if (selectedStartTime != null && selectedEndTime != null) {
-                      await _addService(widget.title, selectedStartTime!,
-                          selectedEndTime!, context);
-
+                      await (String name, TimeOfDay startTime,
+                              TimeOfDay endTime, BuildContext Context) async {
+                        String uid = FirebaseAuth.instance.currentUser!.uid;
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(uid)
+                            .collection('services')
+                            .doc(name)
+                            .set({
+                          'Start Time': startTime.format(Context),
+                          'End Time': endTime.format(Context),
+                        });
+                      }(widget.title, selectedStartTime!, selectedEndTime!,
+                          context);
                       showDialog(
                         context: context,
                         builder: (context) {
@@ -378,18 +400,4 @@ class _NewSubElementState extends State<NewSubElement> {
       },
     );
   }
-}
-
-Future<void> _addService(String name, TimeOfDay startTime, TimeOfDay endTime,
-    BuildContext Context) async {
-  String uid = FirebaseAuth.instance.currentUser!.uid;
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(uid)
-      .collection('services')
-      .doc(name)
-      .set({
-    'Start Time': startTime.format(Context),
-    'End Time': endTime.format(Context),
-  });
 }

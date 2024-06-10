@@ -178,10 +178,20 @@ class AdminServicesElements extends StatelessWidget {
     );
   }
 
-  void _deleteService(BuildContext context) {
+  Future<void> _deleteService(BuildContext context) async {
     FirebaseFirestore.instance.collection('Services').doc(id).delete();
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Service deleted')));
+    QuerySnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+    for (var userDoc in userSnapshot.docs) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDoc.id)
+          .collection('services')
+          .doc(title)
+          .delete();
+    }
   }
 
   @override
