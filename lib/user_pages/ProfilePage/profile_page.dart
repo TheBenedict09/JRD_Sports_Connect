@@ -163,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             'deptID': departmentID,
                                           });
                                         } catch (e) {
-                                          print("Error updating user data: $e");
+                                          // print("Error updating user data: $e");
                                         }
                                         Navigator.of(context).pop();
                                       },

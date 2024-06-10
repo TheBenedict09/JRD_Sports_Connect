@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class AvailableSubscriptionPage extends StatefulWidget {
-  const AvailableSubscriptionPage({super.key});
+  const AvailableSubscriptionPage({Key? key});
 
   @override
   State<AvailableSubscriptionPage> createState() =>
@@ -115,7 +115,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                           child: Text(
                             "Available Subscriptions:",
                             style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                Theme.of(context).textTheme.bodyText1?.copyWith(
                                       fontWeight: FontWeight.w900,
                                       fontSize: 50,
                                     ),
@@ -138,6 +138,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                                 endTime: endTime,
                                 startDay: service['startDay'],
                                 endDay: service['endDay'],
+                                id: service.id,
                               );
                             },
                             separatorBuilder: (context, index) {
@@ -164,12 +165,13 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
 
 class NewSubElement extends StatefulWidget {
   const NewSubElement({
-    super.key,
+    Key? key,
     required this.title,
     required this.startTime,
     required this.endTime,
     required this.startDay,
     required this.endDay,
+    required this.id,
   });
 
   final String title;
@@ -177,62 +179,32 @@ class NewSubElement extends StatefulWidget {
   final String endDay;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
+  final String id;
 
   @override
   _NewSubElementState createState() => _NewSubElementState();
 }
 
 class _NewSubElementState extends State<NewSubElement> {
-  TimeOfDay? selectedStartTime;
-  TimeOfDay? selectedEndTime;
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
 
-  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
-    final TimeOfDay? picked = await showTimePicker(
+  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
+    final DateTime? picked = await showDatePicker(
       context: context,
-      initialTime: isStartTime ? widget.startTime : widget.endTime,
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
     );
 
-    if (picked != null && picked.hour >= 5 && picked.hour <= 21) {
+    if (picked != null) {
       setState(() {
-        if (isStartTime) {
-          selectedStartTime = picked;
+        if (isStartDate) {
+          selectedStartDate = picked;
         } else {
-          selectedEndTime = picked;
+          selectedEndDate = picked;
         }
       });
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Invalid Time",
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          content: Text(
-            "Please select a time between 5:00 AM and 9:00 PM.",
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 25,
-                ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        ),
-      );
     }
   }
 
@@ -247,7 +219,7 @@ class _NewSubElementState extends State<NewSubElement> {
         ),
         child: ListTile(
           onTap: () {
-            AfterTap(context);
+            _afterTap(context);
           },
           title: Text(
             widget.title,
@@ -269,7 +241,7 @@ class _NewSubElementState extends State<NewSubElement> {
     );
   }
 
-  Future<void> AfterTap(BuildContext context) {
+  Future<void> _afterTap(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -287,7 +259,7 @@ class _NewSubElementState extends State<NewSubElement> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Select Time Range:",
+                    "Select Date Range:",
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 20,
@@ -297,39 +269,41 @@ class _NewSubElementState extends State<NewSubElement> {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   Text(
-                    "Start Time:",
+                    "Start Date:",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 18,
                         ),
                   ),
                   TextButton(
                     onPressed: () async {
-                      await _selectTime(context, true);
+                      await _selectDate(context, true);
                       setState(() {});
                     },
                     child: Text(
-                      selectedStartTime == null
-                          ? "Select start time"
-                          : "Start time: ${selectedStartTime!.format(context)}",
+                      selectedStartDate == null
+                          ? "Select start date"
+                          : "Start date: ${selectedStartDate!.toLocal()}"
+                              .split(' ')[0],
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 18, fontWeight: FontWeight.bold, color: c1),
                     ),
                   ),
                   Text(
-                    "End Time:",
+                    "End Date:",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 18,
                         ),
                   ),
                   TextButton(
                     onPressed: () async {
-                      await _selectTime(context, false);
+                      await _selectDate(context, false);
                       setState(() {});
                     },
                     child: Text(
-                      selectedEndTime == null
-                          ? "Select end time"
-                          : "End time: ${selectedEndTime!.format(context)}",
+                      selectedEndDate == null
+                          ? "Select end date"
+                          : "End date: ${selectedEndDate!.toLocal()}"
+                              .split(' ')[0],
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: 18, fontWeight: FontWeight.bold, color: c1),
                     ),
@@ -346,21 +320,14 @@ class _NewSubElementState extends State<NewSubElement> {
                 TextButton(
                   child: const Text("OK"),
                   onPressed: () async {
-                    if (selectedStartTime != null && selectedEndTime != null) {
-                      await (String name, TimeOfDay startTime,
-                              TimeOfDay endTime, BuildContext Context) async {
-                        String uid = FirebaseAuth.instance.currentUser!.uid;
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .collection('services')
-                            .doc(name)
-                            .set({
-                          'Start Time': startTime.format(Context),
-                          'End Time': endTime.format(Context),
-                        });
-                      }(widget.title, selectedStartTime!, selectedEndTime!,
-                          context);
+                    if (selectedStartDate != null && selectedEndDate != null) {
+                      await _saveSubscription(
+                        widget.title,
+                        widget.id,
+                        selectedStartDate!,
+                        selectedEndDate!,
+                        context,
+                      );
                       showDialog(
                         context: context,
                         builder: (context) {
@@ -397,6 +364,47 @@ class _NewSubElementState extends State<NewSubElement> {
             );
           },
         );
+      },
+    );
+  }
+
+  Future<void> _saveSubscription(
+    String name,
+    String id,
+    DateTime startDate,
+    DateTime endDate,
+    BuildContext context,
+  ) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('services')
+        .doc(name)
+        .set(
+      {
+        'Start Date': startDate.toString(),
+        'End Date': endDate.toString(),
+        'id': id,
+      },
+    );
+
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    String username = snapshot['name'];
+
+    await FirebaseFirestore.instance
+        .collection('Services')
+        .doc(id)
+        .collection('subscribers')
+        .doc(uid)
+        .set(
+      {
+        'Start Date': startDate.toString(),
+        'End Date': endDate.toString(),
+        'name': username,
       },
     );
   }
