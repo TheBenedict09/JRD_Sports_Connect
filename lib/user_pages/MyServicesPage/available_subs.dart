@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, library_private_types_in_public_api
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +13,24 @@ class AvailableSubscriptionPage extends StatefulWidget {
 
 class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   double x = 0.9;
+  List<String> subscribedServices = [];
 
-  Future<List<String>> _fetchSubscribedServices() async {
+  @override
+  void initState() {
+    super.initState();
+    _fetchSubscribedServices();
+  }
+
+  Future<void> _fetchSubscribedServices() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     var snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
         .collection('services')
         .get();
-    return snapshot.docs.map((doc) => doc.id).toList();
+    setState(() {
+      subscribedServices = snapshot.docs.map((doc) => doc.id).toList();
+    });
   }
 
   TimeOfDay _timeFromString(String timeString) {
@@ -49,113 +56,102 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<String>>(
-        future: _fetchSubscribedServices(),
-        builder: (context, subscribedSnapshot) {
-          if (subscribedSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (subscribedSnapshot.hasError) {
+      body: StreamBuilder(
+        stream:
+            FirebaseFirestore.instance.collection("Services").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
             return const Center(child: Text("Something went wrong"));
           }
-          var subscribedServices = subscribedSnapshot.data ?? [];
-          return StreamBuilder(
-            stream:
-                FirebaseFirestore.instance.collection("Services").snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return const Center(child: Text("Something went wrong"));
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              var services = snapshot.data?.docs ?? [];
-              var availableServices = services
-                  .where((service) =>
-                      !subscribedServices.contains(service['title']))
-                  .toList();
-              return Stack(
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          var services = snapshot.data?.docs ?? [];
+          var availableServices = services
+              .where((service) => !subscribedServices.contains(service['title']))
+              .toList();
+          return Stack(
+            children: [
+              Stack(
                 children: [
-                  Stack(
-                    children: [
-                      Positioned(
-                        top: -MediaQuery.of(context).size.height * x / 1.8,
-                        left: -MediaQuery.of(context).size.width * x / 2.2,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * x * 1.3,
-                          width: MediaQuery.of(context).size.width * x * 1.3,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: c1,
-                          ),
-                        ),
+                  Positioned(
+                    top: -MediaQuery.of(context).size.height * x / 1.8,
+                    left: -MediaQuery.of(context).size.width * x / 2.2,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * x * 1.3,
+                      width: MediaQuery.of(context).size.width * x * 1.3,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: c1,
                       ),
-                      Positioned(
-                        bottom: -MediaQuery.of(context).size.height * x / 2.2,
-                        right: -MediaQuery.of(context).size.width * x / 2.2,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * x * 1.0,
-                          width: MediaQuery.of(context).size.width * x * 1.0,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: c2,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Available Subscriptions:",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 50,
-                                    ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.14 * 5,
-                          child: ListView.separated(
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              var service = availableServices[index];
-                              TimeOfDay startTime =
-                                  _timeFromString(service['startTime']);
-                              TimeOfDay endTime =
-                                  _timeFromString(service['endTime']);
-                              return NewSubElement(
-                                title: service['title'],
-                                startTime: startTime,
-                                endTime: endTime,
-                                startDay: service['startDay'],
-                                endDay: service['endDay'],
-                                id: service.id,
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const Padding(
-                                padding: EdgeInsets.only(left: 38, right: 38),
-                                child: Divider(),
-                              );
-                            },
-                            itemCount: availableServices.length,
-                          ),
-                        ),
-                      ],
+                  Positioned(
+                    bottom: -MediaQuery.of(context).size.height * x / 2.2,
+                    right: -MediaQuery.of(context).size.width * x / 2.2,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * x * 1.0,
+                      width: MediaQuery.of(context).size.width * x * 1.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: c2,
+                      ),
                     ),
                   ),
                 ],
-              );
-            },
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Available Subscriptions:",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 50,
+                            ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.14 * 5,
+                      child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          var service = availableServices[index];
+                          TimeOfDay startTime =
+                              _timeFromString(service['startTime']);
+                          TimeOfDay endTime =
+                              _timeFromString(service['endTime']);
+                          return NewSubElement(
+                            title: service['title'],
+                            startTime: startTime,
+                            endTime: endTime,
+                            startDay: service['startDay'],
+                            endDay: service['endDay'],
+                            id: service.id,
+                            onSubscribe: () {
+                              _fetchSubscribedServices();
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Padding(
+                            padding: EdgeInsets.only(left: 38, right: 38),
+                            child: Divider(),
+                          );
+                        },
+                        itemCount: availableServices.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -172,6 +168,7 @@ class NewSubElement extends StatefulWidget {
     required this.startDay,
     required this.endDay,
     required this.id,
+    required this.onSubscribe,
   });
 
   final String title;
@@ -180,6 +177,7 @@ class NewSubElement extends StatefulWidget {
   final TimeOfDay startTime;
   final TimeOfDay endTime;
   final String id;
+  final VoidCallback onSubscribe;
 
   @override
   _NewSubElementState createState() => _NewSubElementState();
@@ -407,5 +405,7 @@ class _NewSubElementState extends State<NewSubElement> {
         'name': username,
       },
     );
+
+    widget.onSubscribe();
   }
 }

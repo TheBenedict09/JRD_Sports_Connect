@@ -12,12 +12,14 @@ class ActiveSubElement extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     required this.serviceID,
+    required this.onDelete,
   });
 
   final String name;
   final String startDate;
   final String endDate;
   final String serviceID;
+  final VoidCallback onDelete;
 
   String formatDate(String date) {
     final DateTime parsedDate = DateTime.parse(date);
@@ -47,6 +49,7 @@ class ActiveSubElement extends StatelessWidget {
           .doc(name)
           .delete();
     }
+    onDelete();
   }
 
   @override

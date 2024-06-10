@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/user_pages/HomePage/home_page_updates.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
@@ -64,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             return const Text("Something went wrong");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
           final events = snapshot.data?.docs ?? [];
           return Stack(

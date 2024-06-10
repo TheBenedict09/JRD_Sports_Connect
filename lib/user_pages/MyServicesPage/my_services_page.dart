@@ -135,6 +135,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                             startDate: detail['Start Date'],
                             endDate: detail['End Date'],
                             serviceID: detail['id'],
+                            onDelete: () => setState(() {}),
                           );
                         },
                         separatorBuilder: (context, index) {
