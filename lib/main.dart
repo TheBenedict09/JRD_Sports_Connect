@@ -47,7 +47,7 @@ class _AuthHandlerState extends State<AuthHandler> {
 
   @override
   Widget build(BuildContext context) {
-    if (user != null && user?.uid != "eMiTSDMNKYQGRDqD8diP7WB1Glp2") {
+    if (user != null && user?.uid != "Ld29GMxoyoPHzeIFFjz2pQHulDq2") {
       return const BottomNavBarPage();
     } else {
       return const GetStartedPage();

@@ -66,7 +66,13 @@ class AdminEventsPageState extends State<AdminEventsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add New Event'),
+          title: Text(
+            'Add New Event',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -184,82 +190,113 @@ class AdminEventsPageState extends State<AdminEventsPage> {
     }
   }
 
+  double x = 0.9;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.height * 0.07,
-        child: FloatingActionButton(
-          onPressed: _showAddEventDialog,
-          backgroundColor: Colors.blueAccent,
-          child: Text(
-            "Add new Event",
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w900, fontSize: 20, color: c5),
+        backgroundColor: c10.withOpacity(0.2),
+        floatingActionButton: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height * 0.07,
+          child: FloatingActionButton(
+            onPressed: _showAddEventDialog,
+            backgroundColor: Colors.blue,
+            child: Text(
+              "Add new Event",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
         ),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('Events').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final events = snapshot.data?.docs ?? [];
-
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
+          children: [
+            Stack(
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Events:",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900, fontSize: 50, color: c5),
+                Positioned(
+                  top: -MediaQuery.of(context).size.height * x / 2.2,
+                  left: -MediaQuery.of(context).size.width * x / 2.2,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * x * 1.1,
+                    width: MediaQuery.of(context).size.width * x * 1.1,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue,
+                    ),
                   ),
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    var event = events[index];
-                    TimeOfDay startTime = _timeFromString(event['startTime']);
-                    TimeOfDay endTime = _timeFromString(event['endTime']);
-                    DateTime startDate = DateTime.parse(event['startDate']);
-                    print(startTime);
-                    print(endTime);
-                    return AdminEventsElements(
-                      title: event['title'],
-                      startDay: '${startDate.toLocal()}'.split(' ')[0],
-                      startTime: startTime,
-                      id: event.id,
-                      endTime: endTime,
-                      desc: event['Desc'],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Padding(
-                      padding: EdgeInsets.only(left: 38, right: 38),
-                      child: Divider(),
-                    );
-                  },
-                  itemCount: events.length,
                 )
               ],
             ),
-          );
-        },
-      ),
-    );
+            StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('Events').snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final events = snapshot.data?.docs ?? [];
+
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Events:",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.121,
+                              ),
+                        ),
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          var event = events[index];
+                          TimeOfDay startTime =
+                              _timeFromString(event['startTime']);
+                          TimeOfDay endTime = _timeFromString(event['endTime']);
+                          DateTime startDate =
+                              DateTime.parse(event['startDate']);
+                          return AdminEventsElements(
+                            title: event['title'],
+                            startDay: '${startDate.toLocal()}'.split(' ')[0],
+                            startTime: startTime,
+                            id: event.id,
+                            endTime: endTime,
+                            desc: event['Desc'],
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Padding(
+                            padding: EdgeInsets.only(left: 38, right: 38),
+                            child: Divider(),
+                          );
+                        },
+                        itemCount: events.length,
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ));
   }
 }

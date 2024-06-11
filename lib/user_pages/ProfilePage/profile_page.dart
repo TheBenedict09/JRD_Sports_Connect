@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
       uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot snap =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      if (!mounted) return; // Check if the widget is still mounted
+      if (!mounted) return; 
       if (snap.exists) {
         Map<String, dynamic>? data = snap.data() as Map<String, dynamic>?;
 
@@ -58,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
-      if (!mounted) return; // Check if the widget is still mounted
+      if (!mounted) return; 
       setState(() {
         _name = 'Error';
         email = 'Error';
@@ -71,7 +73,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
-    // Dispose controllers if they are not used anymore
     emailController.dispose();
     companyIDController.dispose();
     departmentIDController.dispose();
@@ -81,6 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c1.withOpacity(0.2),
       floatingActionButton: SizedBox(
         width: MediaQuery.of(context).size.width * 0.3,
         height: MediaQuery.of(context).size.height * 0.065,
@@ -161,8 +163,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     TextButton(
                                       onPressed: () async {
-                                        if (!mounted)
+                                        if (!mounted) {
                                           return; // Check if the widget is still mounted
+                                        }
                                         setState(() {
                                           email = emailController.text;
                                           companyID = companyIDController.text;
@@ -180,10 +183,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                             'deptID': departmentID,
                                           });
                                         } catch (e) {
-                                          // print("Error updating user data: $e");
                                         }
-                                        if (!mounted)
-                                          return; // Check if the widget is still mounted
+                                        if (!mounted) {
+                                          return;
+                                        }
                                         Navigator.of(context).pop();
                                       },
                                       child: const Text('Save'),

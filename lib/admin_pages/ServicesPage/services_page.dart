@@ -59,7 +59,13 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add New Service'),
+          title: Text(
+            'Add New Service',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -102,6 +108,13 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
                   TimeOfDay? picked = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay.now(),
+                    builder: (BuildContext context, Widget? child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: false),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null && picked != _startTime) {
                     setState(() {
@@ -118,6 +131,13 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
                   TimeOfDay? picked = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay.now(),
+                    builder: (BuildContext context, Widget? child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: false),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null && picked != _endTime) {
                     setState(() {
@@ -171,85 +191,117 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
     }
   }
 
+  double x = 0.9;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.5,
-        height: MediaQuery.of(context).size.height * 0.07,
-        child: FloatingActionButton(
-          onPressed: _showAddServiceDialog,
-          backgroundColor: Colors.yellow,
-          child: Text(
-            "Add new Service",
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w900, fontSize: 20, color: c5),
+        backgroundColor: c10.withOpacity(0.2),
+        floatingActionButton: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height * 0.07,
+          child: FloatingActionButton(
+            onPressed: _showAddServiceDialog,
+            backgroundColor: Colors.yellow.shade600,
+            child: Text(
+              "Add new Service",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
         ),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('Services').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final services = snapshot.data?.docs ?? [];
-
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
+          children: [
+            Stack(
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Services:",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900, fontSize: 50, color: c5),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height *
-                      0.14 *
-                      services.length,
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      var service = services[index];
-                      TimeOfDay startTime =
-                          _timeFromString(service['startTime']);
-                      TimeOfDay endTime = _timeFromString(service['endTime']);
-                      return AdminServicesElements(
-                        title: service['title'],
-                        startDay: service['startDay'],
-                        endDay: service['endDay'],
-                        startTime: startTime,
-                        endTime: endTime,
-                        id: service.id,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.only(left: 38, right: 38),
-                        child: Divider(),
-                      );
-                    },
-                    itemCount: services.length,
+                Positioned(
+                  top: -MediaQuery.of(context).size.height * x / 2.2,
+                  left: -MediaQuery.of(context).size.width * x / 2.2,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * x * 1.1,
+                    width: MediaQuery.of(context).size.width * x * 1.1,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.yellow.shade600,
+                    ),
                   ),
                 )
               ],
             ),
-          );
-        },
-      ),
-    );
+            StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('Services').snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final services = snapshot.data?.docs ?? [];
+
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Services:",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.121,
+                              ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height *
+                            0.15 *
+                            services.length,
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var service = services[index];
+                            TimeOfDay startTime =
+                                _timeFromString(service['startTime']);
+                            TimeOfDay endTime =
+                                _timeFromString(service['endTime']);
+                            return AdminServicesElements(
+                              title: service['title'],
+                              startDay: service['startDay'],
+                              endDay: service['endDay'],
+                              startTime: startTime,
+                              endTime: endTime,
+                              id: service.id,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const Padding(
+                              padding: EdgeInsets.only(left: 38, right: 38),
+                              child: Divider(),
+                            );
+                          },
+                          itemCount: services.length,
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ));
   }
 }

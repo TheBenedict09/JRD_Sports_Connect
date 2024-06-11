@@ -28,14 +28,15 @@ class AdminServicesElements extends StatelessWidget {
           title: Text(
             'Edit or Delete Service',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w900, fontSize: 23, color: c5),
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: Text(
             'Would you like to edit or delete this service?',
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(fontSize: 17, color: c5),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: MediaQuery.of(context).size.width * 0.0425,
+                ),
           ),
           actions: <Widget>[
             TextButton(
@@ -200,7 +201,7 @@ class AdminServicesElements extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, right: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.limeAccent.shade400.withOpacity(0.8),
+          color: Colors.lightBlue,
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
@@ -209,18 +210,26 @@ class AdminServicesElements extends StatelessWidget {
           },
           title: Text(
             title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 19,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.065,
+                ),
           ),
-          subtitle: Text("$startDay - $endDay"),
+          subtitle: Text(
+            "$startDay - $endDay",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: c5,
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.043,
+                ),
+          ),
           trailing: Text(
             "${startTime.format(context)} - ${endTime.format(context)}",
-            style: TextStyle(
-              color: c1,
-              fontSize: 14,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: c1,
+                  fontSize: MediaQuery.of(context).size.width * 0.037,
+                ),
           ),
         ),
       ),

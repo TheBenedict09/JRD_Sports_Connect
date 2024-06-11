@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c1.withOpacity(0.2),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("Events").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

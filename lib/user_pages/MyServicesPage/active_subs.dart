@@ -32,7 +32,7 @@ class ActiveSubElement extends StatelessWidget {
                 ? 'rd'
                 : 'th';
     final month = DateFormat('MMMM').format(parsedDate);
-    return '$day$suffix of $month';
+    return '$day$suffix $month';
   }
 
   Future<void> _deleteService(BuildContext context) async {
@@ -67,7 +67,7 @@ class ActiveSubElement extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, right: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: c3,
+          color: Colors.lightBlue.shade400,
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
@@ -175,7 +175,7 @@ class ActiveSubElement extends StatelessWidget {
           subtitle: Text(
             '${formatDate(startDate)} - ${formatDate(endDate)}',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: c1,
+                  color: const Color.fromARGB(255, 3, 53, 129),
                   fontWeight: FontWeight.bold,
                   fontSize: MediaQuery.of(context).size.width * 0.043,
                 ),

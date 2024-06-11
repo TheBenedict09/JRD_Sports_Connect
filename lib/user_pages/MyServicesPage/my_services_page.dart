@@ -54,9 +54,10 @@ class _MyServicesPageState extends State<MyServicesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c1.withOpacity(0.2),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _handleFloatingButtonPressed(context),
-        backgroundColor: c3,
+        backgroundColor: Colors.lightBlue.shade400,
         child: const Icon(Iconsax.add, size: 50),
       ),
       body: StreamBuilder(
@@ -87,7 +88,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                       width: MediaQuery.of(context).size.width * x * 1.3,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: c7,
+                        color: c4,
                       ),
                     ),
                   ),

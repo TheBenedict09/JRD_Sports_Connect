@@ -21,7 +21,7 @@ class HomePageElement extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, right: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: c3,
+          color: Colors.yellow.shade600,
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
@@ -38,13 +38,26 @@ class HomePageElement extends StatelessWidget {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-              Text(
-                date,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xffB80C09),
-                      fontSize: MediaQuery.of(context).size.width * 0.043,
-                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    date,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xffB80C09),
+                          fontSize: MediaQuery.of(context).size.width * 0.043,
+                        ),
+                  ),
+                  Text(
+                    "${startTime.format(context)} - ${endTime.format(context)}",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: c1,
+                          fontSize: MediaQuery.of(context).size.width * 0.043,
+                        ),
+                  ),
+                ],
               ),
               Text(
                 desc,
@@ -53,14 +66,6 @@ class HomePageElement extends StatelessWidget {
                     ),
               ),
             ],
-          ),
-          trailing: Text(
-            "${startTime.format(context)} - ${endTime.format(context)}",
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: c1,
-                  fontSize: MediaQuery.of(context).size.width * 0.037,
-                ),
           ),
         ),
       ),

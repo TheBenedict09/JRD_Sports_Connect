@@ -54,7 +54,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   double x = 0.9;
-
+  bool check = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +108,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.08,
+                  height: MediaQuery.of(context).size.height * 0.06,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 28, right: 28),
@@ -293,10 +293,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       backgroundColor: c5,
                       onPressed: () async {
                         try {
+                          setState(() {
+                            check = true;
+                          });
                           await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                                   email: _email.text, password: _password.text);
                           await _addCredentials();
+                          setState(() {
+                            check = false;
+                          });
 
                           Navigator.pushReplacement(
                             context,
@@ -308,18 +314,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           );
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Failed to register: $e")),
+                            SnackBar(content: Text("Failed to register: $e.")),
                           );
+                          setState(() {
+                            check = false;
+                          });
                         }
                       },
-                      child: Text(
-                        "Register",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.white,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.06,
+                      child: check
+                          ? const Center(child: CircularProgressIndicator())
+                          : Text(
+                              "Next >",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.06,
+                                  ),
                             ),
-                      ),
                     ),
                   ),
                 ),

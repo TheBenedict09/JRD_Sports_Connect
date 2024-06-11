@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _password = TextEditingController();
 
   double x = 0.9;
+  bool check = false;
 
   Future<void> _login() async {
     try {
@@ -42,10 +43,16 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } else {
+        setState(() {
+          check = true;
+        });
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text,
           password: _password.text,
         );
+        setState(() {
+          check = false;
+        });
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -70,12 +77,16 @@ class _LoginPageState extends State<LoginPage> {
         default:
           message = 'An unknown error occurred.';
       }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
           backgroundColor: Colors.red,
         ),
       );
+      setState(() {
+        check = false;
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -204,14 +215,22 @@ class _LoginPageState extends State<LoginPage> {
                     child: FloatingActionButton(
                       backgroundColor: c5,
                       onPressed: _login,
-                      child: Text(
-                        "Login",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.white,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.06,
+                      child: check
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Text(
+                              "Login",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.06,
+                                  ),
                             ),
-                      ),
                     ),
                   ),
                 ),

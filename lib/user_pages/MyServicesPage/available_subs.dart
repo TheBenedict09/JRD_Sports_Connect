@@ -85,7 +85,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                       width: MediaQuery.of(context).size.width * x * 1.3,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: c1,
+                        color: Colors.lightBlue.shade700,
                       ),
                     ),
                   ),
@@ -97,7 +97,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                       width: MediaQuery.of(context).size.width * x * 1.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: c2,
+                        color: c1,
                       ),
                     ),
                   ),
@@ -148,8 +148,9 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                           )
                         : SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            height:
-                                MediaQuery.of(context).size.height * 0.14 * 5,
+                            height: MediaQuery.of(context).size.height *
+                                0.15 *
+                                availableServices.length,
                             child: ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
@@ -243,7 +244,7 @@ class _NewSubElementState extends State<NewSubElement> {
       padding: const EdgeInsets.only(left: 8, right: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: c10.withOpacity(0.8),
+          color: Colors.lime.shade500,
           borderRadius: BorderRadius.circular(22),
         ),
         child: ListTile(
