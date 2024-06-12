@@ -27,11 +27,16 @@ class _AdminReportPageState extends State<AdminReportPage> {
               width: MediaQuery.of(context).size.width * x * 1.1,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 160,
+                  )
+                ],
                 color: Colors.lime.shade500,
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,12 +72,14 @@ class _AdminReportPageState extends State<AdminReportPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return PersonReport();
+                              return const PersonReport();
                             },
                           ),
                         );
                       },
                       child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        maxRadius: MediaQuery.of(context).size.width * 0.2,
                         child: Text(
                           "Users",
                           style: Theme.of(context)
@@ -85,8 +92,6 @@ class _AdminReportPageState extends State<AdminReportPage> {
                                     MediaQuery.of(context).size.width * 0.08,
                               ),
                         ),
-                        backgroundColor: Colors.black,
-                        maxRadius: MediaQuery.of(context).size.width * 0.2,
                       ),
                     ),
                   ),
@@ -97,7 +102,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
                 Center(
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(blurRadius: 160, color: Colors.lightBlue)
@@ -109,12 +114,14 @@ class _AdminReportPageState extends State<AdminReportPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return ServiceReport();
+                              return const ServiceReport();
                             },
                           ),
                         );
                       },
                       child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        maxRadius: MediaQuery.of(context).size.width * 0.2,
                         child: Text(
                           "Services",
                           style: Theme.of(context)
@@ -127,8 +134,6 @@ class _AdminReportPageState extends State<AdminReportPage> {
                                     MediaQuery.of(context).size.width * 0.08,
                               ),
                         ),
-                        backgroundColor: Colors.black,
-                        maxRadius: MediaQuery.of(context).size.width * 0.2,
                       ),
                     ),
                   ),

@@ -102,7 +102,7 @@ class _ServiceReportState extends State<ServiceReport> {
                         mainAxisSize: MainAxisSize.min,
                         children: subscriberWidgets.isNotEmpty
                             ? subscriberWidgets
-                            : [Text('No Subscribers')],
+                            : [const Text('No Subscribers')],
                       ),
                     ),
                   ],

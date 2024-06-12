@@ -90,6 +90,11 @@ class BigGreyCircle extends StatelessWidget {
         height: MediaQuery.of(context).size.height * x * 1.1,
         width: MediaQuery.of(context).size.width * x * 1.1,
         decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 160,
+            )
+          ],
           shape: BoxShape.circle,
           color: c10,
         ),

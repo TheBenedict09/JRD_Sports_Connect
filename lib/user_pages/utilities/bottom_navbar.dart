@@ -46,7 +46,7 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
     return Scaffold(
       body: _widgetsOptions.elementAt(_index),
       bottomNavigationBar: Container(
-        color: Color(0xffB80C09),
+        color: const Color(0xffB80C09),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 7.5),
           child: SafeArea(

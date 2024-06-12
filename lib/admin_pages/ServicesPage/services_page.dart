@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jrd_s_c/admin_pages/ServicesPage/services_page_elements.dart';
@@ -216,6 +218,11 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
                     width: MediaQuery.of(context).size.width * x * 1.1,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 160,
+                        )
+                      ],
                       color: Colors.yellow.shade600,
                     ),
                   ),

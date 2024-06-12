@@ -72,7 +72,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return RegistrationPage();
+                          return const RegistrationPage();
                         },
                       ),
                     );

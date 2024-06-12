@@ -79,6 +79,11 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.lightBlue.shade700,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 160,
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -91,6 +96,11 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: c1,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 160,
+                          )
+                        ],
                       ),
                     ),
                   ),

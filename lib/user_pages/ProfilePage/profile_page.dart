@@ -246,18 +246,23 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Stack(
             children: [
-              Positioned(
-                top: -MediaQuery.of(context).size.height * x / 2.2,
-                right: -MediaQuery.of(context).size.width * x / 2.2,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * x * 1.1,
-                  width: MediaQuery.of(context).size.width * x * 1.1,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: c8,
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   top: -MediaQuery.of(context).size.height * x / 2.2,
+              //   right: -MediaQuery.of(context).size.width * x / 2.2,
+              //   child: Container(
+              //     height: MediaQuery.of(context).size.height * x * 1.1,
+              //     width: MediaQuery.of(context).size.width * x * 1.1,
+              //     decoration: BoxDecoration(
+              //       shape: BoxShape.circle,
+              //       boxShadow: const [
+              //         BoxShadow(
+              //           blurRadius: 160,
+              //         )
+              //       ],
+              //       color: c8,
+              //     ),
+              //   ),
+              // ),
               Positioned(
                 top: MediaQuery.of(context).size.height / 2 -
                     (MediaQuery.of(context).size.height * x / 2.2),
@@ -268,6 +273,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: c7,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 160,
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -280,6 +290,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: c10,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 160,
+                      )
+                    ],
                   ),
                 ),
               ),

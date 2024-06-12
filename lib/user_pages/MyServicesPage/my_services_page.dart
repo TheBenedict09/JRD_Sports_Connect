@@ -20,7 +20,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
 
   void _handleFloatingButtonPressed(BuildContext context) {
     final DateTime now = DateTime.now();
-    if (now.day > 12) {
+    if (now.day > 10) {
       showDialog(
         context: context,
         builder: (context) {
@@ -88,7 +88,12 @@ class _MyServicesPageState extends State<MyServicesPage> {
                       width: MediaQuery.of(context).size.width * x * 1.3,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: c4,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 160,
+                          )
+                        ],
+                        color: Colors.lime.shade600,
                       ),
                     ),
                   ),
@@ -100,6 +105,11 @@ class _MyServicesPageState extends State<MyServicesPage> {
                       width: MediaQuery.of(context).size.width * x * 1.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 260,
+                          )
+                        ],
                         color: c10,
                       ),
                     ),

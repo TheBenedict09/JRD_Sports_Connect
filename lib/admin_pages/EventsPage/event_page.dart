@@ -216,6 +216,11 @@ class AdminEventsPageState extends State<AdminEventsPage> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.blue,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 160,
+                        )
+                      ],
                     ),
                   ),
                 )
