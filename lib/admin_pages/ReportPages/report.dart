@@ -50,7 +50,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
+                height: MediaQuery.of(context).size.height * 0.2,
               ),
               Center(
                 child: SizedBox(

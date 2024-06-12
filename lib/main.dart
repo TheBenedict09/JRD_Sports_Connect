@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:jrd_s_c/admin_pages/ReportPages/report_by_person.dart';
 import 'package:jrd_s_c/admin_pages/utilities/admin_bottom_navbar.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
 import 'package:jrd_s_c/user_pages/BasicCredentialsPage/get_started_page.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme:
               const TextTheme(bodyLarge: TextStyle(fontFamily: 'MyFont'))),
-      home: const AdminBottomNavBarPage(),
+      home: const PersonReport(),
       debugShowCheckedModeBanner: false,
     );
   }
