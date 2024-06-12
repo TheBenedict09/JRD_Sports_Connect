@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme:
               const TextTheme(bodyLarge: TextStyle(fontFamily: 'MyFont'))),
-      home: const PersonReport(),
+      home: const AuthHandler(),
       debugShowCheckedModeBanner: false,
     );
   }

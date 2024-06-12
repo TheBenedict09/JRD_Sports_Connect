@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jrd_s_c/admin_pages/ReportPages/report_by_person.dart';
+import 'package:jrd_s_c/admin_pages/ReportPages/report_by_service.dart';
 import 'package:jrd_s_c/common_utilities/colors.dart';
 
 class AdminReportPage extends StatefulWidget {
@@ -11,125 +12,129 @@ class AdminReportPage extends StatefulWidget {
 
 class _AdminReportPageState extends State<AdminReportPage> {
   double x = 0.9;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: c10.withOpacity(0.2),
       body: Stack(
         children: [
-          Stack(
-            children: [
-              Positioned(
-                top: -MediaQuery.of(context).size.height * x / 2.2,
-                left: -MediaQuery.of(context).size.width * x / 2.2,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * x * 1.1,
-                  width: MediaQuery.of(context).size.width * x * 1.1,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.lime.shade500,
+          Positioned(
+            top: -MediaQuery.of(context).size.height * x / 2.2,
+            left: -MediaQuery.of(context).size.width * x / 2.2,
+            child: Container(
+              height: MediaQuery.of(context).size.height * x * 1.1,
+              width: MediaQuery.of(context).size.width * x * 1.1,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.lime.shade500,
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Reports:",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          fontSize: MediaQuery.of(context).size.width * 0.121,
+                        ),
                   ),
                 ),
-              )
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Reports:",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        fontSize: MediaQuery.of(context).size.width * 0.121,
-                      ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-              ),
-              Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.92,
+                SizedBox(
                   height: MediaQuery.of(context).size.height * 0.2,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.yellow.shade600)),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const PersonReport();
-                          },
-                        ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.person_4,
-                          size: MediaQuery.of(context).size.width * 0.2,
-                          color: c1,
-                        ),
-                        Text(
-                          "Person",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  // fontWeight: FontWeight.w900,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.121,
-                                  color: c1),
-                        ),
+                ),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(blurRadius: 60, color: Colors.yellow.shade600)
                       ],
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.92,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  child: ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.lightBlue)),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.miscellaneous_services,
-                          size: MediaQuery.of(context).size.width * 0.2,
-                        ),
-                        Text(
-                          "Service",
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PersonReport();
+                            },
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        child: Text(
+                          "Users",
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
                               ?.copyWith(
-                                // fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.yellow.shade600,
                                 fontSize:
-                                    MediaQuery.of(context).size.width * 0.121,
+                                    MediaQuery.of(context).size.width * 0.08,
                               ),
                         ),
-                      ],
+                        backgroundColor: Colors.black,
+                        maxRadius: MediaQuery.of(context).size.width * 0.2,
+                      ),
                     ),
                   ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(blurRadius: 160, color: Colors.lightBlue)
+                      ],
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ServiceReport();
+                            },
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        child: Text(
+                          "Services",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                color: Colors.lightBlue,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.08,
+                              ),
+                        ),
+                        backgroundColor: Colors.black,
+                        maxRadius: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
