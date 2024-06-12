@@ -20,7 +20,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
 
   void _handleFloatingButtonPressed(BuildContext context) {
     final DateTime now = DateTime.now();
-    if (now.day > 11) {
+    if (now.day > 12) {
       showDialog(
         context: context,
         builder: (context) {
@@ -120,7 +120,7 @@ class _MyServicesPageState extends State<MyServicesPage> {
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w900,
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.121,
+                                  MediaQuery.of(context).size.width * 0.115,
                             ),
                       ),
                     ),

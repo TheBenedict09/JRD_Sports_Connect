@@ -37,20 +37,13 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
   }
 
   TimeOfDay _timeFromString(String timeString) {
-    final format = RegExp(r'(\d+):(\d+)\s(\w{2})');
+    final format = RegExp(r'(\d{1,2}):(\d{2})');
     final match = format.firstMatch(timeString);
     if (match != null) {
       final hour = int.parse(match.group(1)!);
       final minute = int.parse(match.group(2)!);
-      final period = match.group(3)!;
 
-      final adjustedHour = period == 'PM' && hour != 12
-          ? hour + 12
-          : period == 'AM' && hour == 12
-              ? 0
-              : hour;
-
-      return TimeOfDay(hour: adjustedHour, minute: minute);
+      return TimeOfDay(hour: hour, minute: minute);
     } else {
       throw const FormatException('Invalid time format');
     }
@@ -149,7 +142,7 @@ class _AvailableSubscriptionPageState extends State<AvailableSubscriptionPage> {
                         : SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height *
-                                0.15 *
+                                0.17 *
                                 availableServices.length,
                             child: ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),

@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
       uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot snap =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      if (!mounted) return; 
+      if (!mounted) return;
       if (snap.exists) {
         Map<String, dynamic>? data = snap.data() as Map<String, dynamic>?;
 
@@ -60,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
-      if (!mounted) return; 
+      if (!mounted) return;
       setState(() {
         _name = 'Error';
         email = 'Error';
@@ -182,8 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             'companyID': companyID,
                                             'deptID': departmentID,
                                           });
-                                        } catch (e) {
-                                        }
+                                        } catch (e) {}
                                         if (!mounted) {
                                           return;
                                         }
@@ -297,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     _name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w900,
-                          fontSize: MediaQuery.of(context).size.width * 0.121,
+                          fontSize: MediaQuery.of(context).size.width * 0.117,
                         ),
                   ),
                 ),

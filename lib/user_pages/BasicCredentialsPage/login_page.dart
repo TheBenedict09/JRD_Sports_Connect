@@ -160,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(22)),
                     child: TextField(
                       controller: _email,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: "Enter Email",
                         hintStyle: Theme.of(context).textTheme.bodyLarge

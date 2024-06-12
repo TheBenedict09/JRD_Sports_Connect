@@ -111,7 +111,7 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
                     builder: (BuildContext context, Widget? child) {
                       return MediaQuery(
                         data: MediaQuery.of(context)
-                            .copyWith(alwaysUse24HourFormat: false),
+                            .copyWith(alwaysUse24HourFormat: true),
                         child: child!,
                       );
                     },
@@ -134,7 +134,7 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
                     builder: (BuildContext context, Widget? child) {
                       return MediaQuery(
                         data: MediaQuery.of(context)
-                            .copyWith(alwaysUse24HourFormat: false),
+                            .copyWith(alwaysUse24HourFormat: true),
                         child: child!,
                       );
                     },
@@ -172,20 +172,13 @@ class Admin_ServicesPageState extends State<AdminServicesPage> {
   }
 
   TimeOfDay _timeFromString(String timeString) {
-    final format = RegExp(r'(\d+):(\d+)\s(\w{2})');
+    final format = RegExp(r'(\d{1,2}):(\d{2})');
     final match = format.firstMatch(timeString);
     if (match != null) {
       final hour = int.parse(match.group(1)!);
       final minute = int.parse(match.group(2)!);
-      final period = match.group(3)!;
 
-      final adjustedHour = period == 'PM' && hour != 12
-          ? hour + 12
-          : period == 'AM' && hour == 12
-              ? 0
-              : hour;
-
-      return TimeOfDay(hour: adjustedHour, minute: minute);
+      return TimeOfDay(hour: hour, minute: minute);
     } else {
       throw const FormatException('Invalid time format');
     }
